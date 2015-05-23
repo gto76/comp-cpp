@@ -1,0 +1,11 @@
+#!/bin/bash
+#
+# Usage: run 
+# Compiles and runs if no errors present.
+
+set -e
+
+clear
+make 2>&1 | head
+./a.out
+
