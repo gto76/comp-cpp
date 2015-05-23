@@ -94,3 +94,11 @@ int Util::hexToInt(char cIn) {
 	ss >> std::hex >> out;
 	return out;
 }
+
+string Util::getString(char cIn) {
+	stringstream ss;
+	string s;
+	ss << cIn;
+	ss >> s;
+	return s;
+}

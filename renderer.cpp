@@ -1,17 +1,32 @@
 #include <algorithm>
+#include <vector>
+#include <string>
+#include <regex>
 
-// add to hpp:
-// map<char, int> switchIndex;
-// vector<bool> pc -> maybe just pass pointer to ram and cpu!, or just pass stare, pc, and reg
+#include "renderer.hpp"
+#include "printer.hpp"
+#include "ram.hpp"
+#include "cpu.hpp"
+#include "util.hpp"
 
-string Renderer::renderState(Printer pritner, Ram ram, Cpu cpu) {
-    Renderer::priter = printer;
-    Renderer::ram = ram;
-    Renderer::cpu = cpu;
+using namespace std;
+
+//string DRAWING = "testing!!!!!"; //TODO
+int Renderer::test = 0;
+Printer Renderer::printer;
+Ram Renderer::ram;
+Cpu Renderer::cpu;
+map<char, int> Renderer::switchIndex;
+
+string Renderer::renderState(Printer printerIn, Ram ramIn, Cpu cpuIn) {
+    test = 0;
+    printer = printerIn;
+    ram = ramIn;
+    cpu = cpuIn;
     switchIndex.clear();
 
     string out;
-    for (string line : Util::splitString(DRAWING)) {
+    for (string line : Util::splitString("fsdfsdf")) { // DRAWING)) {
         string processedLine = insertActualValues(line);
         out += processedLine + "\n";
     }
@@ -25,7 +40,7 @@ string Renderer::insertActualValues(string lineIn) {
 
 	for (char cIn : lineIn) {
 		char cOut;
-		if (regex_match(cIn, alpNum)) {
+		if (regex_match(Util::getString(cIn), alpNum)) {
 			cOut = cIn;
 		} else {
 			cOut = getLightbulb(cIn);
@@ -41,7 +56,7 @@ char Renderer::getLightbulb(char cIn) {
 
     regex patRam("[0-9a-e]");
 
-    if (regex_match(cIn, patRam)) {
+    if (regex_match(Util::getString(cIn), patRam)) {
         return getRam(cIn, i);
     }
 
@@ -51,7 +66,7 @@ char Renderer::getLightbulb(char cIn) {
         case 's':
             return Util::getChar(instructionIsPointingToAddress(i));
         case 'r':
-            return  Util::getChar(cpu.getReg()(i)); // todo reg
+            return  Util::getChar(cpu.getReg().at(i)); // todo reg
         case 'i':
             return Util::getChar(instructionHasId(i));
         case 'o':
@@ -71,7 +86,7 @@ bool Renderer::instructionHasId(int id) {
     return Util::getInt(Util::getFirstNibble(ram.get(cpu.getPc()))) == id; // todo ram
 }
 
-char Renderer::getFormattedOutput(i: Int) {
+char Renderer::getFormattedOutput(int i) {
     if (printer.getPrinterOutput().length() <= i) {
         return ' ';
     } else {
@@ -80,7 +95,7 @@ char Renderer::getFormattedOutput(i: Int) {
 }
 
 char Renderer::getRam(char cIn, int i) {
-    int j = Util::hexToInt(c);
-    return Util::getChar(ram.state[j][i]);
+    int j = Util::hexToInt(cIn);
+    return Util::getChar(ram.state.at(j).at(i));
 }
 

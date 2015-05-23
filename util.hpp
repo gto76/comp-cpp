@@ -16,10 +16,11 @@ class Util {
 		static vector<string> splitString(string stringIn);
 		static string makeString(vector<string> lines);
 		static int hexToInt(char cIn);
+		static string getString(char cIn);
+		static char getChar(bool b);
 
 	private:
 		static vector<bool> getBool(int num, int length);
-		static char getChar(bool b);
 };
 
 #endif

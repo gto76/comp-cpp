@@ -9,10 +9,11 @@
 
 #include "const.hpp"
 #include "util.hpp"
-#include "renderer.hpp"
+
 #include "printer.hpp"
 #include "ram.hpp"
 #include "cpu.hpp"
+#include "renderer.hpp"
 
 using namespace std;
 
@@ -56,7 +57,7 @@ string Printer::getPrinterOutput() {
 			}
 			return printerOutput;
 		}
-		void clear() {
+		void Printer::clear() {
 			output = "";
 		}
 
@@ -112,7 +113,8 @@ string Printer::getPrinterOutput() {
 			vector<bool> adr = Util::getSecondNibble(tmp);
 			if (debug) {
 				// TODO: check for efficiency
-				string out = Renderer::renderState(printer, ram, this);//renderState(instruction, adr, output);
+				string out = Renderer::renderState(printer, ram, cpu); // *this only makes a shallow copy!!!!
+				//renderState(instruction, adr, output);
 				for (int i = 0; i < ROWS; i++) {
 					cout << "\n";
 				}

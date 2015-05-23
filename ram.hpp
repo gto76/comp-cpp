@@ -1,6 +1,8 @@
 #ifndef RAM_H
 #define RAM_H
 
+#include <vector>
+
 #include "const.hpp"
 
 using namespace std;
