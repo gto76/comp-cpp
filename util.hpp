@@ -1,17 +1,24 @@
 #ifndef UTIL_H
 #define UTIL_H
 
+#include <string>
+
+using namespace std;
+
 class Util {
 	public:
-		static int getInt(std::vector<bool> bbb);
-		static std::vector<bool> getBoolByte(int num);
-		static std::vector<bool> getBoolNibb(int num);
-		static std::vector<bool> getFirstNibble(std::vector<bool> bbb);
-		static std::vector<bool> getSecondNibble(std::vector<bool> bbb);
-		static std::string getString(std::vector<bool> bbb);
+		static int getInt(vector<bool> bbb);
+		static vector<bool> getBoolByte(int num);
+		static vector<bool> getBoolNibb(int num);
+		static vector<bool> getFirstNibble(vector<bool> bbb);
+		static vector<bool> getSecondNibble(vector<bool> bbb);
+		static string getString(vector<bool> bbb);
+		static vector<string> splitString(string stringIn);
+		static string makeString(vector<string> lines);
+		static int hexToInt(char cIn);
 
 	private:
-		static std::vector<bool> getBool(int num, int length);
+		static vector<bool> getBool(int num, int length);
 		static char getChar(bool b);
 };
 

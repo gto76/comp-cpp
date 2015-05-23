@@ -1,84 +1,86 @@
+#include <algorithm>
 
-string Renderer::renderState(vector<bool> inst, vector<bool> adr, string output) {
-  val sb = new StringBuilder()
-  setPrinterOutput()
-  val switchIndex: Map[Char, Int] = Map()
+// add to hpp:
+// map<char, int> switchIndex;
+// vector<bool> pc -> maybe just pass pointer to ram and cpu!, or just pass stare, pc, and reg
 
-  for (line <- DRAWING.split('\n')) {
-    val processedLine = insertActualValues(line, switchIndex)
-    sb.append(processedLine + "\n")
-}
-sb.deleteCharAt(sb.size - 1)
-sb.toString()A
-}
+string Renderer::renderState(Printer pritner, Ram ram, Cpu cpu) {
+    Renderer::priter = printer;
+    Renderer::ram = ram;
+    Renderer::cpu = cpu;
+    switchIndex.clear();
 
-def Renderer::setPrinterOutput() = {
-  var outputLines = output.split("\n").reverse
-  if (output.length <= 0) {
-    printerOutput = "|0|______________|0|"
-} else {
-    outputLines = outputLines.map(line => "|0| " + line + " |0|")
-    outputLines = outputLines :+ "|0|______________|0|"
-    printerOutput = outputLines.mkString("")
-}
+    string out;
+    for (string line : Util::splitString(DRAWING)) {
+        string processedLine = insertActualValues(line);
+        out += processedLine + "\n";
+    }
+    out.erase(out.end() - 1);
+    return out;
 }
 
-def Renderer::insertActualValues(line: String, switchIndex: Map[Char, Int]): String = {
-  val sb = new StringBuilder()
-  for (c <- line) {
-    val cOut = if ("[0-9a-z]".r.findAllIn(c.toString).length != 1) {
-      c
-  } else {
-      getLightbulb(c, switchIndex)
-  }
-  sb.append(cOut)
-}
-sb.toString
+string Renderer::insertActualValues(string lineIn) {
+	regex alpNum("[0-9a-z]");
+	string lineOut;
+
+	for (char cIn : lineIn) {
+		char cOut;
+		if (regex_match(cIn, alpNum)) {
+			cOut = cIn;
+		} else {
+			cOut = getLightbulb(cIn);
+		}
+		lineOut += cOut;
+	}
+	return lineOut;
 }
 
-def Renderer::getLightbulb(c: Char, switchIndex: Map[Char, Int]): Char = {
-  val i = if (switchIndex.contains(c)) {
-    val i = switchIndex.get(c).get
-    switchIndex.put(c, i + 1)
-    i
-} else {
-    switchIndex.put(c, 1)
-    0
+char Renderer::getLightbulb(char cIn) {
+    //bool keyExists = switchIndex.count(cIn);
+    int i = switchIndex[cIn]++;
+
+    regex patRam("[0-9a-e]");
+
+    if (regex_match(cIn, patRam)) {
+        return getRam(cIn, i);
+    }
+
+    switch (cIn) {
+        case 'p': 
+            return Util::getChar(pcIsPointingToAddress(i));
+        case 's':
+            return Util::getChar(instructionIsPointingToAddress(i));
+        case 'r':
+            return  Util::getChar(cpu.getReg()(i)); // todo reg
+        case 'i':
+            return Util::getChar(instructionHasId(i));
+        case 'o':
+            return getFormattedOutput(i);
+    }
 }
 
-val patRam = "[0-9a-e]".r
-c.toString() match {
-    case "p" => Util.getChar(pcIsPointingToAddress(i))
-    case "s" => Util.getChar(instructionIsPointingToAddress(i))
-    case "r" => Util.getChar(reg(i))
-    case "i" => Util.getChar(instructionHasId(i))
-    case "o" => getFormattedOutput(i)
-    case patRam => getRam(c, i)
-}
+bool Renderer::pcIsPointingToAddress(int adr) {
+    return Util::getInt(cpu.getPc()) == adr; // todo pc
 }
 
-def Renderer::pcIsPointingToAddress(addr: Int): Boolean = {
-  Util.getInt(pc) == addr
+bool Renderer::instructionIsPointingToAddress(int adr) {
+    return Util::getInt(Util::getSecondNibble(ram.get(cpu.getPc()))) == adr; //todo ram pc
 }
 
-def Renderer::instructionIsPointingToAddress(addr: Int): Boolean = {
-  Util.getInt(Util.getSecondNibble(ram.get(pc))) == addr
+bool Renderer::instructionHasId(int id) {
+    return Util::getInt(Util::getFirstNibble(ram.get(cpu.getPc()))) == id; // todo ram
 }
 
-def Renderer::instructionHasId(id: Int): Boolean = {
-  Util.getInt(Util.getFirstNibble(ram.get(pc))) == id
+char Renderer::getFormattedOutput(i: Int) {
+    if (printer.getPrinterOutput().length() <= i) {
+        return ' ';
+    } else {
+        return printer.getPrinterOutput().at(i);
+    }
 }
 
-def Renderer::getFormattedOutput(i: Int): Char = {
-  if (printerOutput.length <= i)
-    ' '
-else
-    printerOutput.charAt(i)
+char Renderer::getRam(char cIn, int i) {
+    int j = Util::hexToInt(c);
+    return Util::getChar(ram.state[j][i]);
 }
 
-def Renderer::getRam(c: Char, i: Int): Char = {
-  val j = Util.hexToInt(c)
-  val ramLines = ram.getStr.split("\n")
-  ramLines(j)(i)
-}
-}

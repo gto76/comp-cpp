@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <math.h>
 #include <iostream>
+#include <sstream>
+#include <string>
 #include <vector>
 
 #include "const.hpp"
@@ -65,4 +67,30 @@ char Util::getChar(bool b) {
 	} else { 
 		return '-';
 	}
+}
+
+vector<string> Util::splitString(string stringIn) {
+	vector<string> out;
+	stringstream stream (stringIn);
+	string line;
+	while (getline(stream, line)) {
+  		out.push_back(line);
+	}
+	return out;
+}
+
+string Util::makeString(vector<string> lines) {
+	string out;
+    for (string line : lines) {
+        out += line;
+    }
+    return out;
+}
+
+int Util::hexToInt(char cIn) {
+	unsigned int out;
+	stringstream ss;
+	ss << cIn;
+	ss >> std::hex >> out;
+	return out;
 }

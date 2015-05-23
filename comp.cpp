@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <iostream>
+#include <algorithm>
 #include <vector>
 #include <string>
 #include <fstream>
@@ -8,6 +9,10 @@
 
 #include "const.hpp"
 #include "util.hpp"
+#include "renderer.hpp"
+#include "printer.hpp"
+#include "ram.hpp"
+#include "cpu.hpp"
 
 using namespace std;
 
@@ -30,13 +35,47 @@ std::ifstream drawingStream(DRAWING_FILE);
 std::string drawingString((std::istreambuf_iterator<char>(drawingStream)),
                  std::istreambuf_iterator<char>());
 
+Printer printer;
+Ram ram;
+Cpu cpu;
 
-string output;
-//var ramValues: Array[Array[Boolean]] = null
 
-class Ram {
-	public: 
-		vector<bool> get(vector<bool> adr) {
+void Printer::print(string sIn) {
+			output += sIn;
+			printerOutputUpdated = false;
+		}
+
+string Printer::getOutput() {
+			return output;
+		}
+
+string Printer::getPrinterOutput() {
+			if (!printerOutputUpdated) {
+				printerOutput = renderPrinterOutput();
+				printerOutputUpdated = true;
+			}
+			return printerOutput;
+		}
+		void clear() {
+			output = "";
+		}
+
+		string Printer::renderPrinterOutput() {
+			if (output.length() <= 0) {
+				return "|0|______________|0|";
+			}
+			vector<string> outputLines = Util::splitString(output);
+			reverse(outputLines.begin(), outputLines.end());
+			for (string line : outputLines) {
+				line =  "|0| " + line + " |0|";
+			}
+			outputLines.push_back("|0|______________|0|");
+			return Util::makeString(outputLines);
+		}
+
+
+
+		vector<bool> Ram::get(vector<bool> adr) {
 			int address = Util::getInt(adr);
 			vector<bool> wordOut(WORD_SIZE);
 			for (int i = 0; i < WORD_SIZE; i++) {
@@ -45,7 +84,7 @@ class Ram {
 			return wordOut;
 		}
 
-		void set(vector<bool> adr, vector<bool> wordIn) {
+		void Ram::set(vector<bool> adr, vector<bool> wordIn) {
 			int address = Util::getInt(adr);
 			if (address < RAM_SIZE) {
 				for (int i = 0; i < WORD_SIZE; i++) {
@@ -55,20 +94,16 @@ class Ram {
 				char formatedInt [10];
 				sprintf(formatedInt, "%3d", Util::getInt(wordIn));
 				string outputLine = Util::getString(wordIn) + " " + formatedInt + "\n";
-		        output = output + outputLine;
+		        printer.print(outputLine);
 		        if (!debug) {
 		          cout << outputLine;
 		        }			
 			}
 		}
-		
-	private:
-		vector<vector<bool>> state = vector<vector<bool>>(RAM_SIZE, vector<bool>(WORD_SIZE)); 
-} ram;
 
-class Cpu {
-	public:
-		void exec() {      
+
+
+		void Cpu::exec() {      
 			if (Util::getInt(pc) >= RAM_SIZE) {
 				exit(0);
 			}
@@ -76,7 +111,8 @@ class Cpu {
 			vector<bool> instruction = Util::getFirstNibble(tmp);
 			vector<bool> adr = Util::getSecondNibble(tmp);
 			if (debug) {
-				string out = "testing..."; //renderState(instruction, adr, output);
+				// TODO: check for efficiency
+				string out = Renderer::renderState(printer, ram, this);//renderState(instruction, adr, output);
 				for (int i = 0; i < ROWS; i++) {
 					cout << "\n";
 				}
@@ -122,54 +158,58 @@ class Cpu {
 			exec();
 		}
 
-	private:
-		vector<bool> reg = vector<bool>(WORD_SIZE);
-		vector<bool> pc = vector<bool>(ADDR_SIZE);
-		int cycle = 0;
-		//string printerOutput = "";
+		// TODO check if safe!!!
 
-		void increasePc() {
+		vector<bool> Cpu::getReg() {
+			return reg;
+		}
+
+		vector<bool> Cpu::getPc() {
+			return pc;
+		} 
+
+		void Cpu::increasePc() {
 			pc = Util::getBoolNibb(Util::getInt(pc) + 1);
 		}
 
-		void read(vector<bool> adr) {
+		void Cpu::read(vector<bool> adr) {
 			reg = ram.get(adr);
 			increasePc();
 		}
-		void write(vector<bool> adr) {
+		void Cpu::write(vector<bool> adr) {
 			ram.set(adr, reg);
 			increasePc();
 		}
-		void add(vector<bool> adr) {
+		void Cpu::add(vector<bool> adr) {
 			reg = Util::getBoolByte(Util::getInt(reg) + Util::getInt(adr));
 			increasePc();			
 		}
-		void sub(vector<bool> adr) {
+		void Cpu::sub(vector<bool> adr) {
 			reg = Util::getBoolByte(Util::getInt(reg) - Util::getInt(adr));
 			increasePc();
 		}
-		void jump(vector<bool> adr) {
+		void Cpu::jump(vector<bool> adr) {
 			pc = adr;
 		}
-		void readPointer(vector<bool> adr) {
+		void Cpu::readPointer(vector<bool> adr) {
 			reg = ram.get(Util::getSecondNibble(reg));
 			increasePc();
 		}
-		void jumpIf(vector<bool> adr) {
+		void Cpu::jumpIf(vector<bool> adr) {
 			if (Util::getInt(reg) >= 127) {
 				pc = adr;
 			} else {
 				increasePc();
 			}
 		}
-		void jumpIfSmaller(vector<bool> adr) {
+		void Cpu::jumpIfSmaller(vector<bool> adr) {
 			if (Util::getInt(reg) >= 127) {
 				pc = adr;
 			} else {
 				increasePc();
 			}
 		}
-} cpu;
+
 
 
 int main(int argc, const char* argv[]) {
