@@ -12,11 +12,18 @@
 using namespace std;
 
 //string DRAWING = "testing!!!!!"; //TODO
-int Renderer::test = 0;
-Printer Renderer::printer;
-Ram Renderer::ram;
-Cpu Renderer::cpu;
-map<char, int> Renderer::switchIndex;
+// int Renderer::test = 0;
+// Printer Renderer::printer;
+// Ram Renderer::ram;
+// Cpu Renderer::cpu;
+// map<char, int> Renderer::switchIndex;
+
+
+int test = 0;
+Printer printer;
+Ram ram;
+Cpu cpu;
+map<char, int> switchIndex;
 
 string Renderer::renderState(Printer printerIn, Ram ramIn, Cpu cpuIn) {
     test = 0;
