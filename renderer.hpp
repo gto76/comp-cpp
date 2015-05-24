@@ -15,18 +15,18 @@ class Renderer {
 		static string renderState(Printer pritnerIn, Ram ramIn, Cpu cpuIn);
 
 	private:
-		static int test;
-		static Printer printer;
-		static Ram ram;
-		static Cpu cpu;
-		static map<char, int> switchIndex;
-		static string insertActualValues(string lineIn);
-		static char getLightbulb(char cIn);
-		static bool pcIsPointingToAddress(int adr);
-		static bool instructionIsPointingToAddress(int adr);
-		static bool instructionHasId(int id);
-		static char getFormattedOutput(int i);
-		static char getRam(char cIn, int i);
+		Renderer (Printer pritnerIn, Ram ramIn, Cpu cpuIn);
+		Printer printer;
+		Ram ram;
+		Cpu cpu;
+		map<char, int> switchIndex;
+		string insertActualValues(string lineIn);
+		char getLightbulb(char cIn);
+		bool pcIsPointingToAddress(int adr);
+		bool instructionIsPointingToAddress(int adr);
+		bool instructionHasId(int id);
+		char getFormattedOutput(int i);
+		char getRam(char cIn, int i);
 };
 
 #endif

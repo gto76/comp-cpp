@@ -11,36 +11,28 @@
 
 using namespace std;
 
-//string DRAWING = "testing!!!!!"; //TODO
-// int Renderer::test = 0;
-// Printer Renderer::printer;
-// Ram Renderer::ram;
-// Cpu Renderer::cpu;
-// map<char, int> Renderer::switchIndex;
-
-
-int test = 0;
-Printer printer;
-Ram ram;
-Cpu cpu;
-map<char, int> switchIndex;
-
+// STATIC PUBLIC:
 string Renderer::renderState(Printer printerIn, Ram ramIn, Cpu cpuIn) {
-    test = 0;
-    printer = printerIn;
-    ram = ramIn;
-    cpu = cpuIn;
-    switchIndex.clear();
+    Renderer instance(printerIn, ramIn, cpuIn);
 
     string out;
     for (string line : Util::splitString("fsdfsdf")) { // DRAWING)) {
-        string processedLine = insertActualValues(line);
+        string processedLine = instance.insertActualValues(line);
         out += processedLine + "\n";
     }
     out.erase(out.end() - 1);
     return out;
 }
 
+// PRIVATE CONSTRUCTOR:
+Renderer::Renderer(Printer printerIn, Ram ramIn, Cpu cpuIn) {
+    Renderer::printer = printerIn;
+    Renderer::ram = ramIn;
+    Renderer::cpu = cpuIn;
+    switchIndex.clear();
+}
+
+// DYNAMIC PRIVATE:
 string Renderer::insertActualValues(string lineIn) {
 	regex alpNum("[0-9a-z]");
 	string lineOut;
