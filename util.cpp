@@ -22,11 +22,11 @@ int Util::getInt(vector<bool> bbb) {
 }
 
 vector<bool> Util::getBoolByte(int num) {
-	return getBool(num, 4);
+	return getBool(num, 8);
 }
 
 vector<bool> Util::getBoolNibb(int num) {
-	return getBool(num, 8);
+	return getBool(num, 4);
 }
 
 vector<bool> Util::getBool(int num, int length) {
@@ -43,6 +43,22 @@ vector<bool> Util::getBool(int num, int length) {
 		num = num % divider;
 	}
 	return out;	
+}
+
+vector<bool> Util::getBoolByte(string sIn) {
+	vector<bool> out(8);
+	int i = 0;
+	for (char c : sIn) {
+		if (c == '-') {
+			out.at(i++) = false;
+		} else if (c == '*') {
+			out.at(i++) = true;
+		} else {
+			cout << "Input Error 02 - Unrecognized char";
+			exit(2);
+		}
+	}
+	return out;
 }
 
 vector<bool> Util::getFirstNibble(vector<bool> bbb) {
@@ -101,4 +117,13 @@ string Util::getString(char cIn) {
 	ss << cIn;
 	ss >> s;
 	return s;
+}
+
+vector<vector<bool>> Util::getRamFromString(string ramString) {
+    vector<vector<bool>> data = vector<vector<bool>>(RAM_SIZE, vector<bool>(WORD_SIZE));
+    int i = 0;
+    for (string line : splitString(ramString)) {
+    	data[i++] = getBoolByte(line);
+    }
+    return data;
 }

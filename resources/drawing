@@ -1,0 +1,24 @@
+
+
+
+          RAM   PC ADD                             
+ ADDR  ________ _ _                               
+ ---- |00000000|p|s|                             
+ ---* |11111111|p|s|                             
+ --*- |22222222|p|s|                             
+ --** |33333333|p|s|             CPU                        PRINTER  
+ -*-- |44444444|p|s|        ______________          ________________________ 
+ -*-* |55555555|p|s|       |              |        |                        |
+ -**- |66666666|p|s|       |  [rrrrrrrr]  |       (|   |=============[]=|   |)
+ -*** |77777777|p|s|       |______________|        |__ _ ______________ _ __|
+ *--- |88888888|p|s|       | [i] READ     |         | oooooooooooooooooooo | 
+ *--* |99999999|p|s|       | [i] WRITE    |         | oooooooooooooooooooo |
+ *-*- |aaaaaaaa|p|s|       | [i] ADD      |         | oooooooooooooooooooo | 
+ *-** |bbbbbbbb|p|s|       | [i] SUBTRACT |         | oooooooooooooooooooo |
+ **-- |cccccccc|p|s|       | [i] JUMP     |         | oooooooooooooooooooo |
+ **-* |dddddddd|p|s|       | [i] POINT    |         | oooooooooooooooooooo |
+ ***- |eeeeeeee|p|s|       | [i] BIGGER   |         | oooooooooooooooooooo |
+ **** | OUTPUT |p|s|       | [i] SMALLER  |         | oooooooooooooooooooo |
+       ############         ##############           ###################### 
+        []      [] \_______/ []        [] \_________/ []                [] 
+

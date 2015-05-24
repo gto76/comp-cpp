@@ -2,6 +2,7 @@
 #include <vector>
 #include <string>
 #include <regex>
+#include <fstream>
 
 #include "renderer.hpp"
 #include "printer.hpp"
@@ -11,12 +12,17 @@
 
 using namespace std;
 
+string DRAWING_FILE = "resources/drawing";
+std::ifstream drawingStream(DRAWING_FILE);
+std::string drawingString((std::istreambuf_iterator<char>(drawingStream)),
+                 std::istreambuf_iterator<char>());
+
 // STATIC PUBLIC:
 string Renderer::renderState(Printer printerIn, Ram ramIn, Cpu cpuIn) {
     Renderer instance(printerIn, ramIn, cpuIn);
 
     string out;
-    for (string line : Util::splitString("fsdfsdf")) { // DRAWING)) {
+    for (string line : Util::splitString(drawingString)) { 
         string processedLine = instance.insertActualValues(line);
         out += processedLine + "\n";
     }
@@ -39,7 +45,7 @@ string Renderer::insertActualValues(string lineIn) {
 
 	for (char cIn : lineIn) {
 		char cOut;
-		if (regex_match(Util::getString(cIn), alpNum)) {
+		if (!regex_match(Util::getString(cIn), alpNum)) {
 			cOut = cIn;
 		} else {
 			cOut = getLightbulb(cIn);
