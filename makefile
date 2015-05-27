@@ -1,2 +1,5 @@
 all:
-	g++ -std=c++11 comp.cpp util.cpp renderer.cpp
+	g++ -c -std=c++11 *.cpp
+	gcc -c -std=gnu11 -g -Wall -O3 *.c
+	g++ -o a.out *.o
+

@@ -7,6 +7,8 @@
 #include <fstream>
 #include <streambuf>
 
+//#include "environment.h"
+
 #include "const.hpp"
 #include "util.hpp"
 
@@ -16,6 +18,10 @@
 #include "renderer.hpp"
 
 using namespace std;
+
+extern "C" {
+	void setEnvironment();
+}
 
 // const int WORD_SIZE = 8;
 // const int ADDR_SIZE = 4;
@@ -225,29 +231,7 @@ void Cpu::jumpIfSmaller(vector<bool> adr) {
  * MAIN
  */
 int main(int argc, const char* argv[]) {
-	// ram.set({false, false, false, false}, {true, true, true, true, true, true, true, true});
-	// vector<bool> word = ram.get({false, false, false, false});
-	// cout << "Value of first bit of first word is " << word[0] << "\n";
-
-	//val cmd = Cli.getCommandLine(args)
-	//val (help, wait, onlyOutput, assemble, speed) = Cli.setParameters(cmd)
-	//if (help) { Cli.printHelp; return }
-	//auto = !wait
-	//debug = !onlyOutput
-	//fq = speed
-	//val arguments = cmd.getArgs()
-
-	// if (assemble) {
-	// 	Assembler.assemble(arguments)
-	// 	exit
-	// }
-
-	// val file = getBufferedFile(arguments)
-	// ramValues = Util.readRamFromFile(file)
-	// ram = new Ram(ramValues)
-	// proc = new Proc()
-	// proc.exec()
-
+	setEnvironment();
 	ram.state = Util::getRamFromString(testString);
 	cpu.exec();
 
