@@ -7,8 +7,6 @@
 #include <fstream>
 #include <streambuf>
 
-//#include "environment.h"
-
 #include "const.hpp"
 #include "util.hpp"
 
@@ -21,6 +19,10 @@ using namespace std;
 
 extern "C" {
 	void setEnvironment();
+	void setOutput();
+	void printCharXY(char c, int x, int y);
+	void printString(const char s[], int x, int y);
+	void redrawScreen();
 }
 
 // const int WORD_SIZE = 8;
@@ -109,6 +111,8 @@ void Ram::set(vector<bool> adr, vector<bool> wordIn) {
 	}
 }
 
+const bool CANONICAL = false;
+
 /*
  * CPU
  */
@@ -120,13 +124,22 @@ void Cpu::exec() {
 	vector<bool> instruction = Util::getFirstNibble(tmp);
 	vector<bool> adr = Util::getSecondNibble(tmp);
 	if (debug) {
-		// TODO: check for efficiency
-		string out = Renderer::renderState(printer, ram, cpu); // *this only makes a shallow copy!!!!
-		//renderState(instruction, adr, output);
-		for (int i = 0; i < ROWS; i++) {
-			cout << "\n";
+		if (CANONICAL) {
+			// TODO: check for efficiency
+			string out = Renderer::renderState(printer, ram, cpu); // *this only makes a shallow copy!!!!
+			//renderState(instruction, adr, output);
+			for (int i = 0; i < ROWS; i++) {
+				cout << "\n";
+			}
+			cout << out;
+		} else {
+			// TODO:
+			string out = Renderer::renderState(printer, ram, cpu);
+			int i = 0;
+			for (string line : Util::splitString(out)) {
+				printString(line.c_str(), 0, i++);
+			}
 		}
-		cout << out;
 		if (automatic && cycle != 0) {
 			usleep(fq*1000);
 		} else {
@@ -232,6 +245,10 @@ void Cpu::jumpIfSmaller(vector<bool> adr) {
  */
 int main(int argc, const char* argv[]) {
 	setEnvironment();
+	setOutput();
+	//printCharXY('c', 20, 20);
+	// void printString(const char s[], int x, int y);
+	// void redrawScreen();
 	ram.state = Util::getRamFromString(testString);
 	cpu.exec();
 

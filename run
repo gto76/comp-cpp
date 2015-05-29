@@ -6,6 +6,6 @@
 set -e
 
 clear
-make 2>&1 | head
+make 2>&1 | head 
 ./a.out
 
