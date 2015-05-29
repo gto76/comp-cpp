@@ -113,6 +113,44 @@ void Ram::set(vector<bool> adr, vector<bool> wordIn) {
 
 const bool CANONICAL = false;
 
+int cursorX = 20;
+int cursorY = 20;
+
+vector<string> buffer;
+
+void eraseCursor() {
+	printCharXY(buffer.at(cursorY).at(cursorX), cursorX, cursorY);
+}
+
+void printCursor() {
+	printf("\e[%dm\e[%dm", 30, 47);
+	//printCharXY('c', cursorX, cursorY);
+	printCharXY(buffer.at(cursorY).at(cursorX), cursorX, cursorY);
+	printf("\e[%dm\e[%dm", 37, 40);
+}
+
+void userInput() {
+	while(1) {
+		char c = getc(stdin);
+		eraseCursor();
+		switch (c) {
+			case 65: // up
+				cursorY--;
+				break;
+			case 66: // down
+				cursorY++;
+				break;
+			case 67: // right
+				cursorX++;
+				break;
+			case 68: // left
+				cursorX--;
+				break;
+		}
+		printCursor();
+	}
+}
+
 /*
  * CPU
  */
@@ -135,10 +173,12 @@ void Cpu::exec() {
 		} else {
 			// TODO:
 			string out = Renderer::renderState(printer, ram, cpu);
+			buffer = Util::splitString(out);
 			int i = 0;
-			for (string line : Util::splitString(out)) {
+			for (string line : buffer) {
 				printString(line.c_str(), 0, i++);
 			}
+			userInput();
 		}
 		if (automatic && cycle != 0) {
 			usleep(fq*1000);

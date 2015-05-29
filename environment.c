@@ -22,7 +22,7 @@ void enableRepeatAndCursor(void);
 
 struct termios saved_attributes;
 
-int const DISABLE_REPEAT = 1;
+int const DISABLE_REPEAT = 0;
 
 //////// AT START ////////////
 
@@ -31,7 +31,7 @@ void setEnvironment() {
 	saveAttributes();
 	setMenuMode();
 	registerSigIntCatcher();
-	//disableRepeatAndCursor();
+	disableRepeatAndCursor();
 }
 
 void checkTerminal() {
