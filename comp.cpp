@@ -22,7 +22,9 @@ extern "C" {
 	void setOutput();
 	void printCharXY(char c, int x, int y);
 	void printString(const char s[], int x, int y);
-	void redrawScreen();
+	typedef void (*callback_function)(void); 
+	void redrawScreen(callback_function draw);
+	void resetEnvironment();
 }
 
 // const int WORD_SIZE = 8;
@@ -113,41 +115,80 @@ void Ram::set(vector<bool> adr, vector<bool> wordIn) {
 
 const bool CANONICAL = false;
 
-int cursorX = 20;
-int cursorY = 20;
+const int RAM_X = 7;
+const int RAM_Y = 5;
+
+int cursorX = 0;
+int cursorY = 0;
 
 vector<string> buffer;
 
-void eraseCursor() {
-	printCharXY(buffer.at(cursorY).at(cursorX), cursorX, cursorY);
+void highlightCursor(bool highlight) {
+	char c;
+	try {
+		c = buffer.at(cursorY+RAM_Y).at(cursorX+RAM_X);
+	} catch (int e) {
+		cout << "Cursor out of bounds. Exception Nr. " << e << '\n';
+		return;
+	}
+	if (highlight) {
+		printf("\e[%dm\e[%dm", 30, 47);
+	} else {
+		printf("\e[%dm\e[%dm", 37, 40);
+	}
+	printCharXY(c, cursorX+RAM_X, cursorY+RAM_Y);
 }
 
-void printCursor() {
-	printf("\e[%dm\e[%dm", 30, 47);
-	//printCharXY('c', cursorX, cursorY);
-	printCharXY(buffer.at(cursorY).at(cursorX), cursorX, cursorY);
-	printf("\e[%dm\e[%dm", 37, 40);
+void switchBit() {
+	ram.state.at(cursorY).at(cursorX) = !ram.state.at(cursorY).at(cursorX);
+	string out = Renderer::renderState(printer, ram, cpu);
+	buffer = Util::splitString(out);	
 }
 
 void userInput() {
 	while(1) {
 		char c = getc(stdin);
-		eraseCursor();
+		highlightCursor(false);
 		switch (c) {
 			case 65: // up
-				cursorY--;
+				if (cursorY > 0) {
+					cursorY--;
+				}
 				break;
 			case 66: // down
-				cursorY++;
+				if (cursorY < RAM_SIZE-1) {
+					cursorY++;
+				}
 				break;
 			case 67: // right
-				cursorX++;
+				if (cursorX < WORD_SIZE-1) {
+					cursorX++;
+				}
 				break;
 			case 68: // left
-				cursorX--;
+				if (cursorX > 0) {
+					cursorX--;
+				}
+				break;
+			case 32: // space
+				switchBit();
+				break;
+			case 10: // enter
+				cpu.exec();
+				getchar();
 				break;
 		}
-		printCursor();
+		highlightCursor(true);
+	}
+}
+
+
+void drawScreen() {
+	string out = Renderer::renderState(printer, ram, cpu);
+	buffer = Util::splitString(out);
+	int i = 0;
+	for (string line : buffer) {
+		printString(line.c_str(), 0, i++);
 	}
 }
 
@@ -162,30 +203,10 @@ void Cpu::exec() {
 	vector<bool> instruction = Util::getFirstNibble(tmp);
 	vector<bool> adr = Util::getSecondNibble(tmp);
 	if (debug) {
-		if (CANONICAL) {
-			// TODO: check for efficiency
-			string out = Renderer::renderState(printer, ram, cpu); // *this only makes a shallow copy!!!!
-			//renderState(instruction, adr, output);
-			for (int i = 0; i < ROWS; i++) {
-				cout << "\n";
-			}
-			cout << out;
-		} else {
-			// TODO:
-			string out = Renderer::renderState(printer, ram, cpu);
-			buffer = Util::splitString(out);
-			int i = 0;
-			for (string line : buffer) {
-				printString(line.c_str(), 0, i++);
-			}
-			userInput();
-		}
-		if (automatic && cycle != 0) {
+		redrawScreen(&drawScreen);
+		if (automatic) {
 			usleep(fq*1000);
 		} else {
-			if (cycle == 0) {
-				cout << "Press Enter to begin execution";
-			}
 			getchar();
 		}
 	}
@@ -280,18 +301,16 @@ void Cpu::jumpIfSmaller(vector<bool> adr) {
 	}
 }
 
+
 /*
  * MAIN
  */
 int main(int argc, const char* argv[]) {
 	setEnvironment();
 	setOutput();
-	//printCharXY('c', 20, 20);
-	// void printString(const char s[], int x, int y);
-	// void redrawScreen();
 	ram.state = Util::getRamFromString(testString);
-	cpu.exec();
-
+	drawScreen();
+	userInput();
 }
 
 

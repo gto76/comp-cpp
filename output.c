@@ -11,7 +11,8 @@ int getAbsoluteY(int y);
 int getAbsoluteCoordinate(int value, int console, int track);
 int coordinatesOutOfBounds(int x, int y);
 void clearScreen(void);
-void redrawScreen(void);
+typedef void (*callback_function)(void); 
+void redrawScreen(callback_function draw);
 void registerSigWinChCatcher(void);
 void sigWinChCatcher(int signum);
 void updateConsoleSize(void);
@@ -85,10 +86,11 @@ void clearScreen(void) {
 	printf("\e[1;1H\e[2J");
 }
 
-void redrawScreen() {
+void redrawScreen(callback_function draw) {
 	updateConsoleSize();
 	clearScreen();
 	// draw stuff here
+	draw();
 	fflush(stdout);
 }
 
@@ -105,7 +107,7 @@ void registerSigWinChCatcher() {
 }
 
 void sigWinChCatcher(int signum) {
-	redrawScreen();
+	//redrawScreen();
 }
 
 void updateConsoleSize() {

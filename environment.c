@@ -17,6 +17,7 @@ void disableRepeatAndCursor(void);
 void resetEnvironment(void);
 void resetInputMode(void);
 void enableRepeatAndCursor(void);
+void resetColor(void); 
 
 //////////////////////////////
 
@@ -73,7 +74,7 @@ void registerSigIntCatcher() {
 }
 
 // method that gets executed when ctrl-c is pressed.
-// necesary so that at_exit method gets executed,
+// necesary so that atexit method gets executed,
 // that sets terminal back to the original state.
 void sigIntCatcher(int signum) {
 	exit(0);
@@ -93,9 +94,16 @@ void disableRepeatAndCursor() {
 
 ///////// AT END ////////////
 
-void resetEnvironment() {
+void resetEnvironment() {  // TODO Doesent work when called from c++;
+	resetColor();
 	resetInputMode();
 	enableRepeatAndCursor();
+}
+
+void resetColor() {
+	// TODO: for now always changes colors back to white on black backgroud
+	printf("\e[%dm\e[%dm", 37, 40);
+	fflush(stdout);
 }
 
 void resetInputMode() {
