@@ -1,20 +1,21 @@
-SOURCES_CPP=comp.cpp renderer.cpp util.cpp
-SOURCES_C=environment.c output.c
-OBJECTS=$(SOURCES_CPP:.cpp=.o) $(SOURCES_C:.c=.o)
+SOURCES_CPP=$(wildcard src/*.cpp)
+SOURCES_C=$(wildcard src/*.c)
 
-EXECUTABLE=a.out
+OBJECTS=$(addprefix obj/,$(notdir $(SOURCES_CPP:.cpp=.o))) $(addprefix obj/,$(notdir $(SOURCES_C:.c=.o)))
+
+EXECUTABLE=comp
 
 all: $(SOURCES_CPP) $(SOURCES_C) $(EXECUTABLE)
     
 $(EXECUTABLE): $(OBJECTS) 
-	g++ -o a.out *.o
+	g++ -o $@ $^
 
-%.o: %.cpp
-	g++ -c -std=c++11 $< 
+obj/%.o: src/%.cpp
+	g++ -c -std=c++11 -o $@ $< 
 
-%.o: %.c
-	gcc -c -std=gnu11 -g -Wall -O3 $<
+obj/%.o: src/%.c
+	gcc -c -std=gnu11 -g -Wall -O3 -o $@ $<
 
 clean:
-	rm *.o a.out
+	rm obj/*.o $(EXECUTABLE)
 

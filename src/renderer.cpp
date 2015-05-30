@@ -4,6 +4,7 @@
 #include <regex>
 #include <fstream>
 
+#include "const.hpp"
 #include "renderer.hpp"
 #include "printer.hpp"
 #include "ram.hpp"
@@ -12,7 +13,6 @@
 
 using namespace std;
 
-string DRAWING_FILE = "resources/drawing";
 std::ifstream drawingStream(DRAWING_FILE);
 std::string drawingString((std::istreambuf_iterator<char>(drawingStream)),
                  std::istreambuf_iterator<char>());
