@@ -20,6 +20,7 @@ class Util {
 		static string getString(char cIn);
 		static char getChar(bool b);
 		static vector<vector<bool>> getRamFromString(string ramString);
+		static vector<bool> getRandomWord();
 
 	private:
 		static vector<bool> getBool(int num, int length);

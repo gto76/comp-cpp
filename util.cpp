@@ -127,3 +127,11 @@ vector<vector<bool>> Util::getRamFromString(string ramString) {
     }
     return data;
 }
+
+vector<bool> Util::getRandomWord() {
+	vector<bool> wordOut(WORD_SIZE);
+	for (int i = 0; i < WORD_SIZE; i++) {
+		wordOut[i] = 0 == (rand() % 2);
+	}
+	return wordOut;
+}

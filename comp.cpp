@@ -89,6 +89,11 @@ string Printer::renderPrinterOutput() {
  */
 vector<bool> Ram::get(vector<bool> adr) {
 	int address = Util::getInt(adr);
+	// return random if last address (reserved for output)
+	if (address == RAM_SIZE-1) {
+		vector<bool> wordOut = Util::getRandomWord();
+		return wordOut;
+	}
 	vector<bool> wordOut(WORD_SIZE);
 	for (int i = 0; i < WORD_SIZE; i++) {
 		wordOut[i] = state[address][i];
@@ -175,7 +180,7 @@ void userInput() {
 				break;
 			case 10: // enter
 				cpu.exec();
-				getchar();
+				getc(stdin);
 				break;
 		}
 		highlightCursor(true);
@@ -237,6 +242,8 @@ void Cpu::exec() {
 		case 7:
 			jumpIfSmaller(adr);
 			break;
+		default:
+			read(adr);
 	}
 	cycle++;
 	exec();
@@ -309,7 +316,7 @@ int main(int argc, const char* argv[]) {
 	setEnvironment();
 	setOutput();
 	ram.state = Util::getRamFromString(testString);
-	drawScreen();
+	redrawScreen(&drawScreen);
 	userInput();
 }
 
