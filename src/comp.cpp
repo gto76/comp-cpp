@@ -90,7 +90,7 @@ string Printer::renderPrinterOutput() {
 vector<bool> Ram::get(vector<bool> adr) {
 	int address = Util::getInt(adr);
 	// return random if last address (reserved for output)
-	if (address == RAM_SIZE-1) {
+	if (address == RAM_SIZE) {
 		vector<bool> wordOut = Util::getRandomWord();
 		return wordOut;
 	}
@@ -103,10 +103,12 @@ vector<bool> Ram::get(vector<bool> adr) {
 
 void Ram::set(vector<bool> adr, vector<bool> wordIn) {
 	int address = Util::getInt(adr);
+	// Save word
 	if (address < RAM_SIZE) {
 		for (int i = 0; i < WORD_SIZE; i++) {
 			state[address][i] = wordIn[i];
 		}
+	// Send word to printer
 	} else {
 		char formatedInt [10];
 		sprintf(formatedInt, "%3d", Util::getInt(wordIn));
@@ -117,8 +119,6 @@ void Ram::set(vector<bool> adr, vector<bool> wordIn) {
         }			
 	}
 }
-
-const bool CANONICAL = false;
 
 const int RAM_X = 7;
 const int RAM_Y = 5;
@@ -181,6 +181,8 @@ void userInput() {
 			case 10: // enter
 				cpu.exec();
 				getc(stdin);
+				ram = Ram();
+				cpu = Cpu();
 				break;
 		}
 		highlightCursor(true);
@@ -202,11 +204,13 @@ void drawScreen() {
  */
 void Cpu::exec() {      
 	if (Util::getInt(pc) >= RAM_SIZE) {
-		exit(0);
+		return;
 	}
+
 	vector<bool> tmp = ram.get(pc);
 	vector<bool> instruction = Util::getFirstNibble(tmp);
 	vector<bool> adr = Util::getSecondNibble(tmp);
+	
 	if (debug) {
 		redrawScreen(&drawScreen);
 		if (automatic) {
@@ -215,6 +219,7 @@ void Cpu::exec() {
 			getchar();
 		}
 	}
+
 	int instCode = Util::getInt(instruction);
 
 	switch (instCode) {
