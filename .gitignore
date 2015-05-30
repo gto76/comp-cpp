@@ -27,3 +27,6 @@
 *.out
 *.app
 comp
+
+# Dependency files
+*.d

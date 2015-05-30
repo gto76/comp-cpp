@@ -10,19 +10,20 @@
 #include "ram.hpp"
 #include "cpu.hpp"
 #include "util.hpp"
+#include "drawing.hpp"
 
 using namespace std;
 
-std::ifstream drawingStream(DRAWING_FILE);
-std::string drawingString((std::istreambuf_iterator<char>(drawingStream)),
-                 std::istreambuf_iterator<char>());
+// std::ifstream drawingStream(DRAWING_FILE);
+// std::string drawingString((std::istreambuf_iterator<char>(drawingStream)),
+//                 std::istreambuf_iterator<char>());
 
 // STATIC PUBLIC:
 string Renderer::renderState(Printer printerIn, Ram ramIn, Cpu cpuIn) {
     Renderer instance(printerIn, ramIn, cpuIn);
 
     string out;
-    for (string line : Util::splitString(drawingString)) { 
+    for (string line : Util::splitString(drawing)) { 
         string processedLine = instance.insertActualValues(line);
         out += processedLine + "\n";
     }
