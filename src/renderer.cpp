@@ -14,10 +14,6 @@
 
 using namespace std;
 
-// std::ifstream drawingStream(DRAWING_FILE);
-// std::string drawingString((std::istreambuf_iterator<char>(drawingStream)),
-//                 std::istreambuf_iterator<char>());
-
 // STATIC PUBLIC:
 string Renderer::renderState(Printer printerIn, Ram ramIn, Cpu cpuIn) {
     Renderer instance(printerIn, ramIn, cpuIn);
@@ -72,7 +68,7 @@ char Renderer::getLightbulb(char cIn) {
         case 's':
             return Util::getChar(instructionIsPointingToAddress(i));
         case 'r':
-            return  Util::getChar(cpu.getReg().at(i)); // todo reg
+            return  Util::getChar(cpu.getReg().at(i)); 
         case 'i':
             return Util::getChar(instructionHasId(i));
         case 'o':
@@ -81,15 +77,15 @@ char Renderer::getLightbulb(char cIn) {
 }
 
 bool Renderer::pcIsPointingToAddress(int adr) {
-    return Util::getInt(cpu.getPc()) == adr; // todo pc
+    return Util::getInt(cpu.getPc()) == adr;
 }
 
 bool Renderer::instructionIsPointingToAddress(int adr) {
-    return Util::getInt(Util::getSecondNibble(ram.get(cpu.getPc()))) == adr; //todo ram pc
+    return Util::getInt(Util::getSecondNibble(ram.get(cpu.getPc()))) == adr; 
 }
 
 bool Renderer::instructionHasId(int id) {
-    return Util::getInt(Util::getFirstNibble(ram.get(cpu.getPc()))) == id; // todo ram
+    return Util::getInt(Util::getFirstNibble(ram.get(cpu.getPc()))) == id; 
 }
 
 char Renderer::getFormattedOutput(int i) {
