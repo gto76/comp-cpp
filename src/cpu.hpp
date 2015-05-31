@@ -10,8 +10,10 @@ using namespace std;
 class Cpu {
 	public:
 		void exec();
-		vector<bool> getReg();
+		vector<bool> getRegister();
 		vector<bool> getPc();
+		vector<bool> getInstruction(); 
+		vector<bool> getAddress();
 	private:
 		vector<bool> reg = vector<bool>(WORD_SIZE);
 		vector<bool> pc = vector<bool>(ADDR_SIZE);

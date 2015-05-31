@@ -4,9 +4,11 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <tuple>
 
 #include "const.hpp"
 #include "util.hpp"
+#include "drawing.hpp"
 
 using namespace std;
 
@@ -134,4 +136,20 @@ vector<bool> Util::getRandomWord() {
 		wordOut[i] = 0 == (rand() % 2);
 	}
 	return wordOut;
+}
+
+tuple<int,int> Util::getLocationOfFirstRamLightbulb() {
+	int i = 0;
+	int j = 0;
+	for (char c : drawing) {
+		if (c == '0') {
+			return tuple<int,int>(i, j); 
+		}
+		if (c == '\n') {
+			i = 0;
+			j++;
+		} else {
+			i++;
+		}
+	}
 }

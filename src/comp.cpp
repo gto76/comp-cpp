@@ -6,6 +6,7 @@
 #include <string>
 #include <fstream>
 #include <streambuf>
+#include <tuple>
 
 #include "const.hpp"
 #include "util.hpp"
@@ -45,6 +46,15 @@ vector<string> buffer;
 // Saved state of a ram
 vector<vector<bool>> savedRam;
 
+// Offset of first ram lightbulb in the asci drawing
+int ramX;
+int ramY;
+
+void setRamOffset() {
+	tuple<int,int> t = Util::getLocationOfFirstRamLightbulb() ;
+	ramX = get<0>(t);
+	ramY = get<1>(t);
+}
 
 void drawScreen() {
 	string out = Renderer::renderState(printer, ram, cpu);
@@ -58,7 +68,7 @@ void drawScreen() {
 void highlightCursor(bool highlight) {
 	char c;
 	try {
-		c = buffer.at(cursorY+RAM_Y).at(cursorX+RAM_X);
+		c = buffer.at(cursorY+ramY).at(cursorX+ramX);
 	} catch (int e) {
 		cout << "Cursor out of bounds. Exception Nr. " << e << '\n';
 		return;
@@ -68,13 +78,23 @@ void highlightCursor(bool highlight) {
 	} else {
 		printf("\e[%dm\e[%dm", 37, 40);
 	}
-	printCharXY(c, cursorX+RAM_X, cursorY+RAM_Y);
+	printCharXY(c, cursorX+ramX, cursorY+ramY);
 }
 
-void switchBit() {
+void switchBitUnderCursor() {
 	ram.state.at(cursorY).at(cursorX) = !ram.state.at(cursorY).at(cursorX);
 	string out = Renderer::renderState(printer, ram, cpu);
 	buffer = Util::splitString(out);	
+}
+
+void run() {
+	savedRam = ram.state;
+	cpu.exec();
+	getc(stdin);
+	ram = Ram();
+	ram.state = savedRam;
+	cpu = Cpu();
+	redrawScreen(&drawScreen);
 }
 
 void userInput() {
@@ -103,16 +123,10 @@ void userInput() {
 				}
 				break;
 			case 32: // space
-				switchBit();
+				switchBitUnderCursor();
 				break;
 			case 10: // enter
-				savedRam = ram.state;
-				cpu.exec();
-				getc(stdin);
-				ram = Ram();
-				ram.state = savedRam;
-				cpu = Cpu();
-				redrawScreen(&drawScreen);
+				run();
 				break;
 		}
 		highlightCursor(true);
@@ -205,19 +219,18 @@ void Cpu::exec() {
 		return;
 	}
 
-	vector<bool> tmp = ram.get(pc);
-	vector<bool> instruction = Util::getFirstNibble(tmp);
-	vector<bool> adr = Util::getSecondNibble(tmp);
-	
 	redrawScreen(&drawScreen);
+
 	if (AUTOMATIC) {
 		usleep(FQ*1000);
 	} else {
 		getchar();
 	}
 
+	vector<bool> instruction = getInstruction();
 	int instCode = Util::getInt(instruction);
-
+	vector<bool> adr = getAddress();
+	
 	switch (instCode) {
 		case 0: 
 			read(adr);
@@ -250,15 +263,23 @@ void Cpu::exec() {
 	exec();
 }
 
-// TODO check if safe!!!
+// TODO check if sends a copy!!!
 
-vector<bool> Cpu::getReg() {
+vector<bool> Cpu::getRegister() {
 	return reg;
 }
 
 vector<bool> Cpu::getPc() {
 	return pc;
-} 
+}
+
+vector<bool> Cpu::getInstruction() {
+	return Util::getFirstNibble(ram.get(pc));
+}
+
+vector<bool> Cpu::getAddress() {
+	return Util::getSecondNibble(ram.get(pc)); 
+}
 
 void Cpu::increasePc() {
 	pc = Util::getBoolNibb(Util::getInt(pc) + 1);
@@ -313,8 +334,10 @@ void Cpu::jumpIfSmaller(vector<bool> adr) {
 /*
  * MAIN
  */
+
 int main(int argc, const char* argv[]) {
-	srand (time(NULL));
+	srand(time(NULL));
+	setRamOffset();
 	setEnvironment();
 	setOutput();
 	redrawScreen(&drawScreen);

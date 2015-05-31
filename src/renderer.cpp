@@ -58,8 +58,10 @@ char Renderer::getLightbulb(char cIn) {
 
     regex patRam("[0-9a-e]");
 
-    if (regex_match(Util::getString(cIn), patRam)) {
-        return getRam(cIn, i);
+    bool charRepresentsRam = regex_match(Util::getString(cIn), patRam);
+    if (charRepresentsRam) {
+        int j = Util::hexToInt(cIn);
+        return getRamAt(j, i);
     }
 
     switch (cIn) {
@@ -68,7 +70,7 @@ char Renderer::getLightbulb(char cIn) {
         case 's':
             return Util::getChar(instructionIsPointingToAddress(i));
         case 'r':
-            return  Util::getChar(cpu.getReg().at(i)); 
+            return  Util::getChar(cpu.getRegister().at(i)); 
         case 'i':
             return Util::getChar(instructionHasId(i));
         case 'o':
@@ -81,11 +83,11 @@ bool Renderer::pcIsPointingToAddress(int adr) {
 }
 
 bool Renderer::instructionIsPointingToAddress(int adr) {
-    return Util::getInt(Util::getSecondNibble(ram.get(cpu.getPc()))) == adr; 
+    return Util::getInt(cpu.getAddress()) == adr;
 }
 
 bool Renderer::instructionHasId(int id) {
-    return Util::getInt(Util::getFirstNibble(ram.get(cpu.getPc()))) == id; 
+    return Util::getInt(cpu.getInstruction()) == id; 
 }
 
 char Renderer::getFormattedOutput(int i) {
@@ -96,8 +98,7 @@ char Renderer::getFormattedOutput(int i) {
     }
 }
 
-char Renderer::getRam(char cIn, int i) {
-    int j = Util::hexToInt(cIn);
+char Renderer::getRamAt(int j, int i) {
     return Util::getChar(ram.state.at(j).at(i));
 }
 

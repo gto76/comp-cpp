@@ -30,3 +30,6 @@ comp
 
 # Dependency files
 *.d
+
+# Backup files
+*.bak

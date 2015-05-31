@@ -26,7 +26,7 @@ class Renderer {
 		bool instructionIsPointingToAddress(int adr);
 		bool instructionHasId(int id);
 		char getFormattedOutput(int i);
-		char getRam(char cIn, int i);
+		char getRamAt(int j, int i);
 };
 
 #endif
