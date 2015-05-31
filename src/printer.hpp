@@ -10,9 +10,9 @@ class Printer {
 		string getPrinterOutput();
 		void clear();
 	private:
-		string output;
+		string output = "";
 		string printerOutput;
-		bool printerOutputUpdated = true;
+		bool printerOutputUpdated = false;
 		string renderPrinterOutput();
 };
 

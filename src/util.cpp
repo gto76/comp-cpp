@@ -13,7 +13,7 @@ using namespace std;
 int Util::getInt(vector<bool> bbb) {
 	int sum = 0;
 	int power = 1;
-	for (int i = ADDR_SIZE-1; i >= 0; i--, power *= 2) {
+	for (int i = bbb.size()-1; i >= 0; i--, power *= 2) {
 		if (bbb[i] == true) {
 			sum += power;
 		}

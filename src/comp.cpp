@@ -31,102 +31,29 @@ extern "C" {
 // const int ADDR_SIZE = 4;
 // const int RAM_SIZE = ADDR_SIZE*ADDR_SIZE-1;
 
-bool debug = true;
-int ROWS = 25;
-bool automatic = true;
-int fq = 300;
-
-string TEST_FILE = "/fibbBin";
-std::ifstream testStream(TEST_FILE);
-std::string testString((std::istreambuf_iterator<char>(testStream)),
-                 std::istreambuf_iterator<char>());
-
-
 Printer printer;
 Ram ram;
 Cpu cpu;
 
-/*
- * PRINTER
- */
-void Printer::print(string sIn) {
-	output += sIn;
-	printerOutputUpdated = false;
-}
-
-string Printer::getOutput() {
-	return output;
-}
-
-string Printer::getPrinterOutput() {
-	if (!printerOutputUpdated) {
-		printerOutput = renderPrinterOutput();
-		printerOutputUpdated = true;
-	}
-	return printerOutput;
-}
-
-void Printer::clear() {
-	output = "";
-	printerOutputUpdated = false;
-}
-
-string Printer::renderPrinterOutput() {
-	if (output.length() <= 0) {
-		return "|0|______________|0|";
-	}
-	vector<string> outputLines = Util::splitString(output);
-	reverse(outputLines.begin(), outputLines.end());
-	for (string line : outputLines) {
-		line =  "|0| " + line + " |0|";
-	}
-	outputLines.push_back("|0|______________|0|");
-	return Util::makeString(outputLines);
-}
-
-/*
- * RAM
- */
-vector<bool> Ram::get(vector<bool> adr) {
-	int address = Util::getInt(adr);
-	// return random if last address (reserved for output)
-	if (address == RAM_SIZE) {
-		vector<bool> wordOut = Util::getRandomWord();
-		return wordOut;
-	}
-	vector<bool> wordOut(WORD_SIZE);
-	for (int i = 0; i < WORD_SIZE; i++) {
-		wordOut[i] = state[address][i];
-	}
-	return wordOut;
-}
-
-void Ram::set(vector<bool> adr, vector<bool> wordIn) {
-	int address = Util::getInt(adr);
-	// Save word
-	if (address < RAM_SIZE) {
-		for (int i = 0; i < WORD_SIZE; i++) {
-			state[address][i] = wordIn[i];
-		}
-	// Send word to printer
-	} else {
-		char formatedInt [10];
-		sprintf(formatedInt, "%3d", Util::getInt(wordIn));
-		string outputLine = Util::getString(wordIn) + " " + formatedInt + "\n";
-        printer.print(outputLine);
-        if (!debug) {
-          cout << outputLine;
-        }			
-	}
-}
-
-const int RAM_X = 7;
-const int RAM_Y = 5;
-
+// Selected bit with the cursor
 int cursorX = 0;
 int cursorY = 0;
 
+// Graphic representation of the computer state
 vector<string> buffer;
+
+// Saved state of a ram
+vector<vector<bool>> savedRam;
+
+
+void drawScreen() {
+	string out = Renderer::renderState(printer, ram, cpu);
+	buffer = Util::splitString(out);
+	int i = 0;
+	for (string line : buffer) {
+		printString(line.c_str(), 0, i++);
+	}
+}
 
 void highlightCursor(bool highlight) {
 	char c;
@@ -179,10 +106,13 @@ void userInput() {
 				switchBit();
 				break;
 			case 10: // enter
+				savedRam = ram.state;
 				cpu.exec();
 				getc(stdin);
 				ram = Ram();
+				ram.state = savedRam;
 				cpu = Cpu();
+				redrawScreen(&drawScreen);
 				break;
 		}
 		highlightCursor(true);
@@ -190,18 +120,86 @@ void userInput() {
 }
 
 
-void drawScreen() {
-	string out = Renderer::renderState(printer, ram, cpu);
-	buffer = Util::splitString(out);
-	int i = 0;
-	for (string line : buffer) {
-		printString(line.c_str(), 0, i++);
+/*
+ * PRINTER
+ */
+
+void Printer::print(string sIn) {
+	output += sIn;
+	printerOutputUpdated = false;
+}
+
+string Printer::getOutput() {
+	return output;
+}
+
+string Printer::getPrinterOutput() {
+	if (!printerOutputUpdated) {
+		printerOutput = renderPrinterOutput();
+		printerOutputUpdated = true;
+	}
+	return printerOutput;
+}
+
+void Printer::clear() {
+	output = "";
+	printerOutputUpdated = false;
+}
+
+string Printer::renderPrinterOutput() {
+	if (output.length() <= 0) {
+		return "|0|______________|0|";
+	}
+	vector<string> lines = Util::splitString(output);
+	reverse(lines.begin(), lines.end());
+	vector<string>  outputLines;
+	for (string line : lines) {
+		outputLines.push_back("|0| " + line + " |0|");
+	}
+	outputLines.push_back("|0|______________|0|");
+	return Util::makeString(outputLines);
+}
+
+
+/*
+ * RAM
+ */
+
+vector<bool> Ram::get(vector<bool> adr) {
+	int address = Util::getInt(adr);
+	// return random if last address (reserved for output)
+	if (address == RAM_SIZE) {
+		vector<bool> wordOut = Util::getRandomWord();
+		return wordOut;
+	}
+	vector<bool> wordOut(WORD_SIZE);
+	for (int i = 0; i < WORD_SIZE; i++) {
+		wordOut[i] = state[address][i];
+	}
+	return wordOut;
+}
+
+void Ram::set(vector<bool> adr, vector<bool> wordIn) {
+	int address = Util::getInt(adr);
+	// Save word
+	if (address < RAM_SIZE) {
+		for (int i = 0; i < WORD_SIZE; i++) {
+			state[address][i] = wordIn[i];
+		}
+	// Send word to printer
+	} else {
+		char formatedInt [3];
+		sprintf(formatedInt, "%3d", Util::getInt(wordIn));
+		string outputLine = Util::getString(wordIn) + " " + formatedInt + "\n";
+        printer.print(outputLine);			
 	}
 }
+
 
 /*
  * CPU
  */
+
 void Cpu::exec() {      
 	if (Util::getInt(pc) >= RAM_SIZE) {
 		return;
@@ -211,13 +209,11 @@ void Cpu::exec() {
 	vector<bool> instruction = Util::getFirstNibble(tmp);
 	vector<bool> adr = Util::getSecondNibble(tmp);
 	
-	if (debug) {
-		redrawScreen(&drawScreen);
-		if (automatic) {
-			usleep(fq*1000);
-		} else {
-			getchar();
-		}
+	redrawScreen(&drawScreen);
+	if (AUTOMATIC) {
+		usleep(FQ*1000);
+	} else {
+		getchar();
 	}
 
 	int instCode = Util::getInt(instruction);
@@ -318,9 +314,9 @@ void Cpu::jumpIfSmaller(vector<bool> adr) {
  * MAIN
  */
 int main(int argc, const char* argv[]) {
+	srand (time(NULL));
 	setEnvironment();
 	setOutput();
-	ram.state = Util::getRamFromString(testString);
 	redrawScreen(&drawScreen);
 	userInput();
 }
