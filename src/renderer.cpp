@@ -53,7 +53,6 @@ string Renderer::insertActualValues(string lineIn) {
 }
 
 char Renderer::getLightbulb(char cIn) {
-    //bool keyExists = switchIndex.count(cIn);
     int i = switchIndex[cIn]++;
 
     regex patRam("[0-9a-e]");
@@ -83,10 +82,26 @@ bool Renderer::pcIsPointingToAddress(int adr) {
 }
 
 bool Renderer::instructionIsPointingToAddress(int adr) {
+    // If execution did't yet start
+    if (cpu.getCycle() == 0) {
+        return false;
+    }
+    // If pc is pointing to the last addres (execution reached the end)
+    if (Util::getInt(cpu.getPc()) == RAM_SIZE) {
+        return false;
+    }
     return Util::getInt(cpu.getAddress()) == adr;
 }
 
 bool Renderer::instructionHasId(int id) {
+    // If execution did't yet start
+    if (cpu.getCycle() == 0) {
+        return false;
+    }
+    // If pc is pointing to the last addres (execution reached the end)
+    if (Util::getInt(cpu.getPc()) == RAM_SIZE) {
+        return false;
+    } 
     return Util::getInt(cpu.getInstruction()) == id; 
 }
 

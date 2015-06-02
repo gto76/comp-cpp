@@ -50,6 +50,8 @@ vector<vector<bool>> savedRam;
 int ramX;
 int ramY;
 
+bool executionCanceled = false;
+
 void setRamOffset() {
 	tuple<int,int> t = Util::getLocationOfFirstRamLightbulb() ;
 	ramX = get<0>(t);
@@ -82,15 +84,20 @@ void highlightCursor(bool highlight) {
 }
 
 void switchBitUnderCursor() {
-	ram.state.at(cursorY).at(cursorX) = !ram.state.at(cursorY).at(cursorX);
-	string out = Renderer::renderState(printer, ram, cpu);
-	buffer = Util::splitString(out);	
+	bool newBitValue = !ram.state.at(cursorY).at(cursorX);
+	ram.state.at(cursorY).at(cursorX) = newBitValue;
+	buffer.at(cursorY+ramY).at(cursorX+ramX) = Util::getChar(newBitValue);
 }
 
 void run() {
 	savedRam = ram.state;
 	cpu.exec();
-	getc(stdin);
+	// if 'esc' was pressed then it doesn't wait for keypress at the end
+	if (executionCanceled) {
+		executionCanceled = false;
+	} else {
+		getc(stdin);
+	}
 	ram = Ram();
 	ram.state = savedRam;
 	cpu = Cpu();
@@ -130,6 +137,26 @@ void userInput() {
 				break;
 		}
 		highlightCursor(true);
+	}
+}
+
+// Run every cycle
+void sleepAndCheckForKey() {
+	usleep(FQ*1000);
+	// Pauses execution if a key was hit, and waits for another key hit
+	int keyCode = Util::getKey();
+	if (keyCode) {
+		// If escape was pressed
+		if (keyCode == 27) {
+			executionCanceled = true;
+			return;
+		}
+		// Press key to continue
+		keyCode = getc(stdin);
+		// If the key was esc
+		if (keyCode == 27) {
+			executionCanceled = true;
+		}
 	}
 }
 
@@ -214,17 +241,18 @@ void Ram::set(vector<bool> adr, vector<bool> wordIn) {
  * CPU
  */
 
-void Cpu::exec() {      
-	if (Util::getInt(pc) >= RAM_SIZE) {
+void Cpu::exec() {
+	sleepAndCheckForKey();
+	if (executionCanceled) {
 		return;
 	}
 
+	cycle++;     
 	redrawScreen(&drawScreen);
 
-	if (AUTOMATIC) {
-		usleep(FQ*1000);
-	} else {
-		getchar();
+	// Stop if reached last address
+	if (Util::getInt(pc) >= RAM_SIZE) {
+		return;
 	}
 
 	vector<bool> instruction = getInstruction();
@@ -259,11 +287,14 @@ void Cpu::exec() {
 		default:
 			read(adr);
 	}
-	cycle++;
 	exec();
 }
 
 // TODO check if sends a copy!!!
+
+int Cpu::getCycle() {
+	return cycle;
+}
 
 vector<bool> Cpu::getRegister() {
 	return reg;
@@ -274,7 +305,12 @@ vector<bool> Cpu::getPc() {
 }
 
 vector<bool> Cpu::getInstruction() {
-	return Util::getFirstNibble(ram.get(pc));
+	vector<bool> instruction = Util::getFirstNibble(ram.get(pc));
+	// if instruction id is larger than the number of instructions than the instruction with id 1 (write) gets executed.
+	if (Util::getInt(instruction) >= NUM_OF_INSTRUCTIONS) {
+		return Util::getBoolNibb(0);
+	}
+	return instruction;
 }
 
 vector<bool> Cpu::getAddress() {
@@ -296,12 +332,14 @@ void Cpu::write(vector<bool> adr) {
 }
 
 void Cpu::add(vector<bool> adr) {
-	reg = Util::getBoolByte(Util::getInt(reg) + Util::getInt(adr));
+	//reg = Util::getBoolByte(Util::getInt(reg) + Util::getInt(adr)); // WRONG!!
+	reg = Util::getBoolByte(Util::getInt(reg) + Util::getInt(ram.get(adr)));
 	increasePc();			
 }
 
 void Cpu::sub(vector<bool> adr) {
-	reg = Util::getBoolByte(Util::getInt(reg) - Util::getInt(adr));
+	//reg = Util::getBoolByte(Util::getInt(reg) - Util::getInt(adr)); // WRONG!!
+	reg = Util::getBoolByte(Util::getInt(reg) - Util::getInt(ram.get(adr)));
 	increasePc();
 }
 
@@ -323,7 +361,7 @@ void Cpu::jumpIf(vector<bool> adr) {
 }
 
 void Cpu::jumpIfSmaller(vector<bool> adr) {
-	if (Util::getInt(reg) >= 127) {
+	if (Util::getInt(reg) < 127) {
 		pc = adr;
 	} else {
 		increasePc();
@@ -341,6 +379,7 @@ int main(int argc, const char* argv[]) {
 	setEnvironment();
 	setOutput();
 	redrawScreen(&drawScreen);
+	highlightCursor(true);
 	userInput();
 }
 

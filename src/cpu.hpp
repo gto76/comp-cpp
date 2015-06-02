@@ -14,6 +14,7 @@ class Cpu {
 		vector<bool> getPc();
 		vector<bool> getInstruction(); 
 		vector<bool> getAddress();
+		int getCycle();
 	private:
 		vector<bool> reg = vector<bool>(WORD_SIZE);
 		vector<bool> pc = vector<bool>(ADDR_SIZE);

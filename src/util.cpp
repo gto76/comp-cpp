@@ -5,6 +5,8 @@
 #include <string>
 #include <vector>
 #include <tuple>
+#include <unistd.h>
+#include <sys/select.h>
 
 #include "const.hpp"
 #include "util.hpp"
@@ -152,4 +154,19 @@ tuple<int,int> Util::getLocationOfFirstRamLightbulb() {
 			i++;
 		}
 	}
+}
+
+// Returns the code of last pressed key, or 0 if none was pressed
+int Util::getKey() {
+	int c = 0;
+    struct timeval tv = { 0L, 0L };
+    fd_set fds;
+    FD_ZERO(&fds);
+    FD_SET(STDIN_FILENO, &fds);
+    select(STDIN_FILENO + 1, &fds, NULL, NULL, &tv);
+
+    if (FD_ISSET(STDIN_FILENO, &fds)) {
+		c = getchar();
+	}
+	return c;	
 }

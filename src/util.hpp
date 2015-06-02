@@ -23,6 +23,7 @@ class Util {
 		static vector<vector<bool>> getRamFromString(string ramString);
 		static vector<bool> getRandomWord();
 		static tuple<int,int> getLocationOfFirstRamLightbulb();
+		static int getKey();
 
 	private:
 		static vector<bool> getBool(int num, int length);

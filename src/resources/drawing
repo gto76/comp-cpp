@@ -1,24 +1,24 @@
 
 
-
-      RAM   PC ADD                             
-   ________ _ _  ADDR                             
-  |00000000|p|s| ----                            
-  |11111111|p|s| ---*                            
-  |22222222|p|s| --*-                            
-  |33333333|p|s| --**            CPU                        PRINTER  
-  |44444444|p|s| -*--       ______________          ________________________ 
-  |55555555|p|s| -*-*      |              |        |                        |
-  |66666666|p|s| -**-      |  [rrrrrrrr]  |       (|   |=============[]=|   |)
-  |77777777|p|s| -*** INST |______________|        |__ _ ______________ _ __|
-  |88888888|p|s| *--- ---- | [i] READ     |         | oooooooooooooooooooo | 
-  |99999999|p|s| *--* ---* | [i] WRITE    |         | oooooooooooooooooooo |
-  |aaaaaaaa|p|s| *-*- --*- | [i] ADD      |         | oooooooooooooooooooo | 
-  |bbbbbbbb|p|s| *-** --** | [i] SUBTRACT |         | oooooooooooooooooooo |
-  |cccccccc|p|s| **-- -*-- | [i] JUMP     |         | oooooooooooooooooooo |
-  |dddddddd|p|s| **-* -*-* | [i] POINT    |         | oooooooooooooooooooo |
-  |eeeeeeee|p|s| ***- -**- | [i] BIGGER   |         | oooooooooooooooooooo |
-  | OUTPUT |p|s| **** -*** | [i] SMALLER  |         | oooooooooooooooooooo |
-   ############             ##############           ###################### 
-    []      [] \___________/ []        [] \_________/ []                [] 
+                 
+                                   RAM   PC ADD    
+                          ADDR  ________ _ _      
+                          ---- |00000000|p|s|    
+                          ---* |11111111|p|s|    
+                          --*- |22222222|p|s|    
+         CPU              --** |33333333|p|s|               PRINTER  
+    ______________        -*-- |44444444|p|s|       ________________________ 
+   |              |       -*-* |55555555|p|s|      |                        |
+   |  [rrrrrrrr]  |       -**- |66666666|p|s|     (|   |=============[]=|   |)
+   |______________| INST  -*** |77777777|p|s|      |__ _ ______________ _ __|
+   | [i] READ     | ----  *--- |88888888|p|s|       | oooooooooooooooooooo | 
+   | [i] WRITE    | ---*  *--* |99999999|p|s|       | oooooooooooooooooooo |
+   | [i] ADD      | --*-  *-*- |aaaaaaaa|p|s|       | oooooooooooooooooooo | 
+   | [i] SUBTRACT | --**  *-** |bbbbbbbb|p|s|       | oooooooooooooooooooo |
+   | [i] JUMP     | -*--  **-- |cccccccc|p|s|       | oooooooooooooooooooo |
+   | [i] POINT    | -*-*  **-* |dddddddd|p|s|       | oooooooooooooooooooo |
+   | [i] BIGGER   | -**-  ***- |eeeeeeee|p|s|       | oooooooooooooooooooo |
+   | [i] SMALLER  | -***  **** | OUTPUT |p|s|       | oooooooooooooooooooo |
+    ##############              ############         ###################### 
+     []        [] \____________/ []      [] \_______/ []                [] 
 

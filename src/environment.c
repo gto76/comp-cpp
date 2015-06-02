@@ -82,7 +82,7 @@ void sigIntCatcher(int signum) {
 
 void disableRepeatAndCursor() {
 	if (DISABLE_REPEAT) {
-		// disable repeat in xwindow cosole
+		// disable repeat in xwindow console
 		system("xset -r"); 
 		// disable repeat in Linux console
 		system("setterm --repeat off");

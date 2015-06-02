@@ -106,10 +106,12 @@ void registerSigWinChCatcher() {
 	sigaction(SIGWINCH, &action, NULL);
 }
 
+// Fires when window size changes
 void sigWinChCatcher(int signum) {
 	//redrawScreen();
 }
 
+// Asks system about window size
 void updateConsoleSize() {
 	struct winsize w;
 	ioctl(0, TIOCGWINSZ, &w);
@@ -118,6 +120,7 @@ void updateConsoleSize() {
 }
 
 ///////// UTIL //////////
+
 void copyArray(char dest[], const char src[], int width) {
     int i;
     for (i = 0; i < width-1; i++) {

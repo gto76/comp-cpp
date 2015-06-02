@@ -3,9 +3,12 @@
 # Usage: run 
 # Compiles and runs if no errors present.
 
-set -e
-
 clear
-make 2>&1 | head 
-./a.out
+out=$(make 2>&1)
+rc=$?
+if [[ $rc -ne 0 ]]; then
+	echo "$out" | head
+else
+	./comp
+fi
 
