@@ -9,7 +9,7 @@ OBJECTS=$(addprefix $(OBJDIR)/,$(notdir $(SOURCES_CPP:.cpp=.o))) $(addprefix $(O
 
 EXECUTABLE=comp
 
-all: $(SOURCES_CPP) $(SOURCES_C) $(EXECUTABLE)
+all: $(OBJDIR) $(SOURCES_CPP) $(SOURCES_C) $(EXECUTABLE) 
     
 $(EXECUTABLE): $(OBJECTS) 
 	g++ -o $@ $^
