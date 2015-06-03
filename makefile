@@ -4,7 +4,8 @@ CPPFLAGS=-std=c++11
 SOURCES_CPP=$(wildcard src/*.cpp) 
 SOURCES_C=$(wildcard src/*.c)
 
-OBJECTS=$(addprefix obj/,$(notdir $(SOURCES_CPP:.cpp=.o))) $(addprefix obj/,$(notdir $(SOURCES_C:.c=.o)))
+OBJDIR=obj
+OBJECTS=$(addprefix $(OBJDIR)/,$(notdir $(SOURCES_CPP:.cpp=.o))) $(addprefix $(OBJDIR)/,$(notdir $(SOURCES_C:.c=.o)))
 
 EXECUTABLE=comp
 
@@ -23,18 +24,22 @@ $(EXECUTABLE): $(OBJECTS)
 # copypasting bits and pieces for whole day now. Don't you event
 # think about RTFMing me, I'll find where you live and burn your
 # house down :)
--include obj/*.d
+-include $(OBJDIR)/*.d
 
-obj/%.o: src/%.cpp
+$(OBJDIR)/%.o: src/%.cpp
 	g++ -c $(CPPFLAGS) -o $@ $< 
-	g++ -MM $(CPPFLAGS) -MT '$@' src/$*.cpp > obj/$*.d
+	g++ -MM $(CPPFLAGS) -MT '$@' src/$*.cpp > $(OBJDIR)/$*.d
 
-obj/%.o: src/%.c
+$(OBJDIR)/%.o: src/%.c
 	gcc -c $(CFLAGS) -o $@ $<
-	gcc -MM $(CFLAGS) -MT '$@' src/$*.c > obj/$*.d
+	gcc -MM $(CFLAGS) -MT '$@' src/$*.c > $(OBJDIR)/$*.d
+
+# Creates 'obj' directory if it doesent exist
+$(OBJDIR):
+	mkdir -p $(OBJDIR)
 
 clean:
-	rm -f obj/* $(EXECUTABLE)
+	rm -f $(OBJDIR)/* $(EXECUTABLE)
 
 # Convert a drawing textfile to a drawing.hpp, containing
 # that textfile in a string constant.
