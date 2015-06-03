@@ -45,8 +45,8 @@ clean:
 # that textfile in a string constant.
 src/drawing.hpp: src/resources/drawing
 	sed '/Do not edit/q' src/drawing.hpp > /tmp/drawing.hpp
-	echo "\nconst string drawing = {" >> /tmp/drawing.hpp 
+	echo -e "\nconst string drawing = {" >> /tmp/drawing.hpp 
 	xxd -i src/resources/drawing | tail -n+2 | head -n-1 >> /tmp/drawing.hpp
-	echo "\n#endif" >> /tmp/drawing.hpp
+	echo -e "\n#endif" >> /tmp/drawing.hpp
 	mv -f /tmp/drawing.hpp src/drawing.hpp
 
