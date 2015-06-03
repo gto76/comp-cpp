@@ -25,14 +25,9 @@ extern "C" {
 	void setOutput(callback_function drawScreen, int width, int height);
 	void printCharXY(char c, int x, int y);
 	void printString(const char s[], int x, int y);
-	typedef void (*callback_function)(void); 
 	void redrawScreen();
 	void resetEnvironment();
 }
-
-// const int WORD_SIZE = 8;
-// const int ADDR_SIZE = 4;
-// const int RAM_SIZE = ADDR_SIZE*ADDR_SIZE-1;
 
 Printer printer;
 Ram ram;
@@ -60,7 +55,7 @@ void setRamOffset() {
 	ramY = get<1>(t);
 }
 
-void drawCompScreen() {
+void drawScreen() {
 	string out = Renderer::renderState(printer, ram, cpu);
 	buffer = Util::splitString(out);
 	int i = 0;
@@ -175,7 +170,7 @@ void prepareOutput() {
 		drawingWidth = std::max(drawingWidth, line.length());
 		drawingHeight++;
 	}
-	setOutput(&drawCompScreen, drawingWidth, drawingHeight);
+	setOutput(&drawScreen, drawingWidth, drawingHeight);
 }
 
 
@@ -307,8 +302,6 @@ void Cpu::exec() {
 	}
 	exec();
 }
-
-// TODO check if sends a copy!!!
 
 int Cpu::getCycle() {
 	return cycle;

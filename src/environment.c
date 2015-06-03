@@ -17,7 +17,7 @@ void disableRepeatAndCursor(void);
 void resetEnvironment(void);
 void resetInputMode(void);
 void enableRepeatAndCursor(void);
-void resetColor(void); 
+void resetConsole(void); 
 
 //////////////////////////////
 
@@ -94,16 +94,14 @@ void disableRepeatAndCursor() {
 
 ///////// AT END ////////////
 
-void resetEnvironment() {  // TODO Doesent work when called from c++;
-	resetColor();
+void resetEnvironment() {
 	resetInputMode();
 	enableRepeatAndCursor();
+	resetConsole();
 }
 
-void resetColor() {
-	// TODO: for now always changes colors back to white on black backgroud
-	printf("\e[%dm\e[%dm", 37, 40);
-	fflush(stdout);
+void resetConsole() {
+	system("reset");
 }
 
 void resetInputMode() {

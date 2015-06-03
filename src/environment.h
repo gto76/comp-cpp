@@ -1,12 +1,1 @@
 void setEnvironment();
-void checkTerminal();
-void saveAttributes();
-void setMenuMode();
-void setRaceMode(); 
-void setNoncanonicalMode(int vmin, int vtime);
-void registerSigIntCatcher();
-void sigIntCatcher(int signum);
-void disableRepeatAndCursor();
-void resetEnvironment();
-void resetInputMode();
-void enableRepeatAndCursor();

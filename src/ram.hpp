@@ -9,7 +9,7 @@ using namespace std;
 
 class Ram {
 	public:
-		vector<vector<bool>> state = vector<vector<bool>>(RAM_SIZE, vector<bool>(WORD_SIZE));  // TODO: check by reference/value tutorial
+		vector<vector<bool>> state = vector<vector<bool>>(RAM_SIZE, vector<bool>(WORD_SIZE));
 		vector<bool> get(vector<bool> adr);
 		void set(vector<bool> adr, vector<bool> wordIn);
 };

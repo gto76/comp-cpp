@@ -40,6 +40,8 @@ void setOutput(callback_function drawScreenThat, int width, int height) {
 	pictureHeight = height;
 	registerSigWinChCatcher();
 	updateConsoleSize();
+	// set colors
+	printf("\e[%dm\e[%dm", 37, 40);
 }
 
 /////////////////////////
