@@ -27,20 +27,19 @@ cygwin\Cygwin.bat
 
 * For better experience you can run real Linux inside the
 VirtualBox instead of using Cygwin. Here are the
-[instrucions](http://github.com/gto76/my-aliases/conf-files/debian/README.md)
+[instrucions](https://github.com/gto76/my-aliases/tree/gh-pages/conf-files/debian)
 
 
 ### UNIX
 ```bash
 git clone https://github.com/gto76/comp-cpp.git
 cd comp
-./run
+bash run
 ```
 
-Help
-----
 
-#### Memory
+Memory
+------
 ```
 instructions - 4 bits
   |  +-- adresses - 4 bits
@@ -67,9 +66,10 @@ instructions - 4 bits
 * Execution stops when programm reachess last adress (15)
 * Whatever gets written to the last adress is send to the printer.
 * Computer has one 8 bit register.
-* Wher reading from the last address (15), we get a random byte value.
+* When reading from the last address (15), we get a random byte value.
 
-#### Instruction set
+Instruction set
+---------------
 
 * `READ ----` - Copies the value at the specifed address into
 register.  
@@ -88,7 +88,7 @@ hold value 255 = `********`.
 hold value 0 = `--------`.  
 * `SHIFT RIGHT -***` - Moves every bit of the register one spot
 to the right. This way rightmost bit gets lost, and a leftmost
-becomes '-'. This is the only instruction that doesn't use the
+becomes `-`. This is the only instruction that doesn't use the
 address part, making the last four bits irrelevant.  
 
 
