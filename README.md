@@ -8,7 +8,7 @@ Simple 4-bit virtual computer for learning purposes
 How to run on…
 --------------
 
-### Windows
+### Windows…
 
 * Download and install [wget](http://sourceforge.net/projects/gnuwin32/files/wget/1.11.4-1/wget-1.11.4-1-setup.exe/download)
 * Open command prompt
@@ -24,6 +24,10 @@ cygwin\Cygwin.bat
 ```
 
 * Start Cygwin and run the UNIX commands. 
+
+* For better experience you can run real Linux inside the
+VirtualBox instead of using Cygwin. Here are the
+[instrucions](http://github.com/gto76/my-aliases/conf-files/debian/README.md)
 
 
 ### UNIX
@@ -67,22 +71,22 @@ instructions - 4 bits
 
 #### Instruction set
 
-* `---- READ` - Copies the value at the specifed address into
+* `READ ----` - Copies the value at the specifed address into
 register.  
-* `---* WRITE` - Copies value of the register to the specified
+* `WRITE ---*` - Copies value of the register to the specified
 address.  
-* `--*- ADD` - Adds value at the speicfied address to the value
+* `ADD --*-` - Adds value at the speicfied address to the value
 of the register, and writes result to the register. If the result is bigger than the maximum possible value (255 = ********) then 255 gets written.  
-* `--** SUBTRACT` - Subtreacts value at the speicfied address from the value.  
+* `SUBTRACT --**` - Subtreacts value at the speicfied address from the value.  
 of the register, and writes result to the register. If the result is smaller than 0 then 0 gets written.  
-* `-*-- JUMP` - Changes the value of the program counter to the
+* `JUMP -*--`  - Changes the value of the program counter to the
 specified address, meaning that in the next cycle execution will
 continue at that address.
-* `-*-* IF MAX` - Jumps to the specified address if the register
-hold value 255 = ********.  
-* `-**- IF MIN` - Jumps to the specified address if the register
-hold value 0 = --------.  
-* `-*** SHIFT RIGHT` - Moves every bit of the register one spot
+* `IF MAX -*-*` - Jumps to the specified address if the register
+hold value 255 = `********`.  
+* `IF MIN -**-` - Jumps to the specified address if the register
+hold value 0 = `--------`.  
+* `SHIFT RIGHT -***` - Moves every bit of the register one spot
 to the right. This way rightmost bit gets lost, and a leftmost
 becomes '-'. This is the only instruction that doesn't use the
 address part, making the last four bits irrelevant.  
