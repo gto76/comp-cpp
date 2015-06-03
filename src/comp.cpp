@@ -15,16 +15,18 @@
 #include "ram.hpp"
 #include "cpu.hpp"
 #include "renderer.hpp"
+#include "drawing.hpp"
 
 using namespace std;
 
 extern "C" {
+	typedef void (*callback_function)(void); 
 	void setEnvironment();
-	void setOutput();
+	void setOutput(callback_function drawScreen, int width, int height);
 	void printCharXY(char c, int x, int y);
 	void printString(const char s[], int x, int y);
 	typedef void (*callback_function)(void); 
-	void redrawScreen(callback_function draw);
+	void redrawScreen();
 	void resetEnvironment();
 }
 
@@ -58,7 +60,7 @@ void setRamOffset() {
 	ramY = get<1>(t);
 }
 
-void drawScreen() {
+void drawCompScreen() {
 	string out = Renderer::renderState(printer, ram, cpu);
 	buffer = Util::splitString(out);
 	int i = 0;
@@ -77,10 +79,11 @@ void highlightCursor(bool highlight) {
 	}
 	if (highlight) {
 		printf("\e[%dm\e[%dm", 30, 47);
-	} else {
-		printf("\e[%dm\e[%dm", 37, 40);
 	}
 	printCharXY(c, cursorX+ramX, cursorY+ramY);
+	if (highlight) {
+		printf("\e[%dm\e[%dm", 37, 40);
+	}
 }
 
 void switchBitUnderCursor() {
@@ -102,7 +105,7 @@ void run() {
 	ram = Ram();
 	ram.state = savedRam;
 	cpu = Cpu();
-	redrawScreen(&drawScreen);
+	redrawScreen();
 }
 
 void userInput() {
@@ -111,21 +114,25 @@ void userInput() {
 		highlightCursor(false);
 		switch (c) {
 			case 65: // up
+			case 107: // k
 				if (cursorY > 0) {
 					cursorY--;
 				}
 				break;
 			case 66: // down
+			case 106: // j
 				if (cursorY < RAM_SIZE-1) {
 					cursorY++;
 				}
 				break;
 			case 67: // right
+			case 108: // l
 				if (cursorX < WORD_SIZE-1) {
 					cursorX++;
 				}
 				break;
 			case 68: // left
+			case 104: // h
 				if (cursorX > 0) {
 					cursorX--;
 				}
@@ -159,6 +166,16 @@ void sleepAndCheckForKey() {
 			executionCanceled = true;
 		}
 	}
+}
+
+void prepareOutput() {
+	size_t drawingWidth = 0;
+	size_t drawingHeight = 0;
+	for (string line : Util::splitString(drawing)) {
+		drawingWidth = std::max(drawingWidth, line.length());
+		drawingHeight++;
+	}
+	setOutput(&drawCompScreen, drawingWidth, drawingHeight);
 }
 
 
@@ -249,7 +266,7 @@ void Cpu::exec() {
 	}
 
 	cycle++;     
-	redrawScreen(&drawScreen);
+	redrawScreen();
 
 	// Stop if reached last address
 	if (Util::getInt(pc) >= RAM_SIZE) {
@@ -368,7 +385,6 @@ void Cpu::shiftRight() {
 }
 
 
-
 /*
  * MAIN
  */
@@ -377,8 +393,8 @@ int main(int argc, const char* argv[]) {
 	srand(time(NULL));
 	setRamOffset();
 	setEnvironment();
-	setOutput();
-	redrawScreen(&drawScreen);
+	prepareOutput();
+	redrawScreen();
 	highlightCursor(true);
 	userInput();
 }

@@ -3,7 +3,8 @@
 #include <signal.h>
 #include <string.h>
 
-void setOutput(void);
+typedef void (*callback_function)(void); 
+void setOutput(callback_function drawScreen, int width, int height);
 void printCharXY(char c, int x, int y);
 void printString(char const s[], int x, int y);
 int getAbsoluteX(int x);
@@ -11,8 +12,7 @@ int getAbsoluteY(int y);
 int getAbsoluteCoordinate(int value, int console, int track);
 int coordinatesOutOfBounds(int x, int y);
 void clearScreen(void);
-typedef void (*callback_function)(void); 
-void redrawScreen(callback_function draw);
+void redrawScreen();
 void registerSigWinChCatcher(void);
 void sigWinChCatcher(int signum);
 void updateConsoleSize(void);
@@ -21,15 +21,23 @@ void copyArray(char dest[], const char src[], int width);
 /////////////////////////////
 
 #define PRINT_IN_CENTER 1
-#define TRACK_WIDTH 80
-#define TRACK_HEIGHT 24
+#define DEFAULT_WIDTH 80
+#define DEFAULT_HEIGHT 24
 
-int columns = TRACK_WIDTH;
-int rows = TRACK_HEIGHT;
+int pictureWidth = DEFAULT_WIDTH;
+int pictureHeight = DEFAULT_HEIGHT;
+
+int columns = DEFAULT_WIDTH;
+int rows = DEFAULT_HEIGHT;
+
+callback_function drawScreen;
 
 ///////// PUBLIC ////////////
 
-void setOutput() {
+void setOutput(callback_function drawScreenThat, int width, int height) {
+	drawScreen = drawScreenThat;
+	pictureWidth = width;
+	pictureHeight = height;
 	registerSigWinChCatcher();
 	updateConsoleSize();
 }
@@ -58,11 +66,11 @@ void printString(char const s[], int x, int y) {
 }
 
 int getAbsoluteX(int x) {
-	return getAbsoluteCoordinate(x, columns, TRACK_WIDTH);
+	return getAbsoluteCoordinate(x, columns, pictureWidth);
 }
 
 int getAbsoluteY(int y) {
-	return getAbsoluteCoordinate(y, rows, TRACK_HEIGHT);
+	return getAbsoluteCoordinate(y, rows, pictureHeight);
 }
 
 int getAbsoluteCoordinate(int value, int console, int track) {
@@ -72,7 +80,7 @@ int getAbsoluteCoordinate(int value, int console, int track) {
 		if (offset < 0)
 			offset = 0;
 	}
-	return value+1 + offset;
+	return value + 1 + offset;
 }
 
 int coordinatesOutOfBounds(int x, int y) {
@@ -86,11 +94,11 @@ void clearScreen(void) {
 	printf("\e[1;1H\e[2J");
 }
 
-void redrawScreen(callback_function draw) {
+void redrawScreen() {
 	updateConsoleSize();
 	clearScreen();
 	// draw stuff here
-	draw();
+	drawScreen();
 	fflush(stdout);
 }
 
@@ -108,7 +116,7 @@ void registerSigWinChCatcher() {
 
 // Fires when window size changes
 void sigWinChCatcher(int signum) {
-	//redrawScreen();
+	redrawScreen();
 }
 
 // Asks system about window size
