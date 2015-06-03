@@ -34,6 +34,12 @@ vector<bool> Util::getBoolNibb(int num) {
 }
 
 vector<bool> Util::getBool(int num, int length) {
+	if (num <= 0) {
+		return vector<bool>(length, false);
+	}
+	if (num >= (int) pow(2, length)-1) {
+		return vector<bool>(length, true);
+	}
 	vector<bool> out(length);
 	int j = 0;
 	for (int i = length-1; i >= 0; i--) {

@@ -98,6 +98,7 @@ void run() {
 	} else {
 		getc(stdin);
 	}
+    printer.print("            \n");	
 	ram = Ram();
 	ram.state = savedRam;
 	cpu = Cpu();
@@ -276,13 +277,13 @@ void Cpu::exec() {
 			jump(adr);
 			break;
 		case 5:
-			readPointer(adr);
+			jumpIfMax(adr);
 			break;
 		case 6:
-			jumpIf(adr);
+			jumpIfMin(adr);
 			break;
 		case 7:
-			jumpIfSmaller(adr);
+			shiftRight();
 			break;
 		default:
 			read(adr);
@@ -332,13 +333,11 @@ void Cpu::write(vector<bool> adr) {
 }
 
 void Cpu::add(vector<bool> adr) {
-	//reg = Util::getBoolByte(Util::getInt(reg) + Util::getInt(adr)); // WRONG!!
 	reg = Util::getBoolByte(Util::getInt(reg) + Util::getInt(ram.get(adr)));
 	increasePc();			
 }
 
 void Cpu::sub(vector<bool> adr) {
-	//reg = Util::getBoolByte(Util::getInt(reg) - Util::getInt(adr)); // WRONG!!
 	reg = Util::getBoolByte(Util::getInt(reg) - Util::getInt(ram.get(adr)));
 	increasePc();
 }
@@ -347,26 +346,27 @@ void Cpu::jump(vector<bool> adr) {
 	pc = adr;
 }
 
-void Cpu::readPointer(vector<bool> adr) {
-	reg = ram.get(Util::getSecondNibble(reg));
-	increasePc();
-}
-
-void Cpu::jumpIf(vector<bool> adr) {
-	if (Util::getInt(reg) >= 127) {
+void Cpu::jumpIfMax(vector<bool> adr) {
+	if (Util::getInt(reg) >= pow(2, WORD_SIZE)-1) {
 		pc = adr;
 	} else {
 		increasePc();
 	}
 }
 
-void Cpu::jumpIfSmaller(vector<bool> adr) {
-	if (Util::getInt(reg) < 127) {
+void Cpu::jumpIfMin(vector<bool> adr) {
+	if (Util::getInt(reg) <= 0) {
 		pc = adr;
 	} else {
 		increasePc();
 	}
 }
+
+void Cpu::shiftRight() {
+	reg = Util::getBoolByte(Util::getInt(reg) / 2);
+	increasePc();	
+}
+
 
 
 /*

@@ -25,9 +25,9 @@ class Cpu {
 		void add(vector<bool> adr);
 		void sub(vector<bool> adr);
 		void jump(vector<bool> adr);
-		void readPointer(vector<bool> adr);
-		void jumpIf(vector<bool> adr);
-		void jumpIfSmaller(vector<bool> adr);
+		void jumpIfMax(vector<bool> adr);
+		void jumpIfMin(vector<bool> adr);
+		void shiftRight();
 };
 
 #endif
