@@ -47,6 +47,7 @@ vector<vector<bool>> savedRam;
 int ramX;
 int ramY;
 
+int executionCounter = 0;
 bool executionCanceled = false;
 
 void setRamOffset() {
@@ -88,6 +89,9 @@ void switchBitUnderCursor() {
 }
 
 void run() {
+	if (executionCounter > 0) {
+    	printer.print("            \n");	
+    }
 	savedRam = ram.state;
 	cpu.exec();
 	// if 'esc' was pressed then it doesn't wait for keypress at the end
@@ -96,11 +100,11 @@ void run() {
 	} else {
 		getc(stdin);
 	}
-    printer.print("            \n");	
 	ram = Ram();
 	ram.state = savedRam;
 	cpu = Cpu();
 	redrawScreen();
+	executionCounter++;
 }
 
 void userInput() {
@@ -173,7 +177,6 @@ void prepareOutput() {
 	setOutput(&drawScreen, drawingWidth, drawingHeight);
 }
 
-
 /*
  * PRINTER
  */
@@ -214,7 +217,6 @@ string Printer::renderPrinterOutput() {
 	return Util::makeString(outputLines);
 }
 
-
 /*
  * RAM
  */
@@ -248,7 +250,6 @@ void Ram::set(vector<bool> adr, vector<bool> wordIn) {
         printer.print(outputLine);			
 	}
 }
-
 
 /*
  * CPU
@@ -376,7 +377,6 @@ void Cpu::shiftRight() {
 	reg = Util::getBoolByte(Util::getInt(reg) / 2);
 	increasePc();	
 }
-
 
 /*
  * MAIN
