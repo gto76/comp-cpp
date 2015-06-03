@@ -19,7 +19,7 @@ How to run on…
 setx PATH "%PATH%;C:\Program Files (x86)\GnuWin32\bin"
 wget --no-check-certificate https://cygwin.com/setup-x86_64.exe
 mkdir cygwin
-setup-x86_64.exe --quiet-mode --no-shortcuts --site http://cygwin.mirror.constant.com --root %cd%\cygwin -P git -P gcc-core -P libgcc1 -P libclang-devel -P make -B
+setup-x86_64.exe --quiet-mode --no-shortcuts --site http://cygwin.mirror.constant.com --root %cd%\cygwin -P git -P gcc-g++ -P ncurses -P vim-common -P libgcc1 -P libclang-devel -P make -B
 cygwin\Cygwin.bat
 ```
 
