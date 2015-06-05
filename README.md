@@ -1,7 +1,7 @@
 Comp
 ====
 
-Simple 4-bit virtual computer for learning purposes
+Simple 4-bit/1 Hz virtual computer for learning purposes
 
 ![screenshot](doc/screenshot.png)
 
