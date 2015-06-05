@@ -8,7 +8,7 @@ Simple 4-bit virtual computer for learning purposes
 How to run on…
 --------------
 
-### Windows…
+### Windows
 
 * Download and install [wget](http://sourceforge.net/projects/gnuwin32/files/wget/1.11.4-1/wget-1.11.4-1-setup.exe/download)
 * Open command prompt
@@ -24,11 +24,6 @@ cygwin\Cygwin.bat
 ```
 
 * Start Cygwin and run the UNIX commands. 
-
-* For better experience you can run real Linux inside the
-VirtualBox instead of using Cygwin. Here are the
-[instrucions](https://github.com/gto76/my-aliases/tree/gh-pages/conf-files/debian)
-
 
 ### UNIX
 ```bash
