@@ -23,7 +23,7 @@ setup-x86_64.exe --quiet-mode --no-shortcuts --site http://cygwin.mirror.constan
 cygwin\Cygwin.bat
 ```
 
-* Start Cygwin and run the UNIX commands. 
+* Run the UNIX commands. 
 
 ### UNIX
 ```bash
