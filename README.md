@@ -31,17 +31,17 @@ instructions - 4 bits
 
 * Execution starts at the first address (0). 
 * Execution stops when program reaches last address (15)
-* Whatever gets written to the last adress is send to the printer.
+* Whatever gets written to the last address is send to the printer.
 * Computer has one 8 bit register.
 * When reading from the last address (15), we get a random byte value.
 
 Instruction set
 ---------------
 
-* `READ     ----` - Copies the value at the specifed address into register.  
+* `READ     ----` - Copies the value at the specified address into register.  
 * `WRITE    ---*` - Copies value of the register to the specified address.  
-* `ADD      --*-` - Adds value at the speicfied address to the value of the register, and writes result to the register. If the result is bigger than the maximum possible value (255 = ********) then 255 gets written.  
-* `SUBTRACT --**` - Subtreacts value at the speicfied address from the value of the register, and writes result to the register. If the result is smaller than 0 then 0 gets written.  
+* `ADD      --*-` - Adds value at the specified address to the value of the register, and writes result to the register. If the result is bigger than the maximum possible value (255 = ********) then 255 gets written.  
+* `SUBTRACT --**` - Subtracts value at the speicfied address from the value of the register, and writes result to the register. If the result is smaller than 0 then 0 gets written.  
 * `JUMP     -*--`  - Changes the value of the program counter to the specified address, meaning that in the next cycle execution will continue at that address.  
 * `IF MAX   -*-*` - Jumps to the specified address if the register hold value 255 = `********`. 
 * `IF MIN   -**-` - Jumps to the specified address if the register hold value 0 = `--------`. 
