@@ -43,9 +43,9 @@ Instruction set
 * `ADD      --*-` - Adds value at the specified address to the value of the register, and writes result to the register. If the result is bigger than the maximum possible value (255 = ********) then 255 gets written.  
 * `SUBTRACT --**` - Subtracts value at the speicfied address from the value of the register, and writes result to the register. If the result is smaller than 0 then 0 gets written.  
 * `JUMP     -*--`  - Changes the value of the program counter to the specified address, meaning that in the next cycle execution will continue at that address.  
-* `IF MAX   -*-*` - Jumps to the specified address if the register hold value 255 = `********`. 
-* `IF MIN   -**-` - Jumps to the specified address if the register hold value 0 = `--------`. 
-* `SHIFT R -***` - Moves every bit of the register one spot to the right. This way rightmost bit gets lost, and a leftmost becomes `-`. This is the only instruction that doesn't use the address part, making the last four bits irrelevant.  
+* `IF MAX   -*-*` - Jumps to the specified address if register has value 255 = `********`. 
+* `IF MIN   -**-` - Jumps to the specified address if register has value 0 = `--------`. 
+* `SHIFT R -***` - Moves every bit of the register one spot to the right. This way rightmost bit gets lost, and a leftmost becomes '*-*'. This is the only instruction that doesn't use the address part, making the last four bits irrelevant.  
 
 How to run on…
 --------------
