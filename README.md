@@ -53,7 +53,7 @@ How to run on…
 ### Windows
 
 * Download and install [*wget*](http://sourceforge.net/projects/gnuwin32/files/wget/1.11.4-1/wget-1.11.4-1-setup.exe/download)
-* Open command prompt
+* Open *Command Prompt*
 * Go to the directory where you want *Cygwin* installed
 * Install and start *Cygwin*:
 
