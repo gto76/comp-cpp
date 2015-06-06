@@ -52,10 +52,10 @@ How to run on…
 
 ### Windows
 
-* Download and install [wget](http://sourceforge.net/projects/gnuwin32/files/wget/1.11.4-1/wget-1.11.4-1-setup.exe/download)
+* Download and install [*wget*](http://sourceforge.net/projects/gnuwin32/files/wget/1.11.4-1/wget-1.11.4-1-setup.exe/download)
 * Open command prompt
-* Go to the directory where you want Cygwin installed
-* Install and start Cygwin:
+* Go to the directory where you want *Cygwin* installed
+* Install and start *Cygwin*:
 
 >```bat
 setx PATH "%PATH%;C:\Program Files (x86)\GnuWin32\bin"
@@ -65,7 +65,7 @@ setup-x86_64.exe --quiet-mode --no-shortcuts --site http://cygwin.mirror.constan
 cygwin\Cygwin.bat
 ```
 
-* Run the UNIX commands  
+* Run the *UNIX* commands  
 
 ### UNIX
 ```bash
