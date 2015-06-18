@@ -46,8 +46,7 @@ Instruction set
 * `IF MAX   -*-*` - Jumps to the specified address if register has value 255 = `********`. 
 * `IF MIN   -**-` - Jumps to the specified address if register has value 0 = `--------`. 
 * `SHIFT R -***` - Moves every bit of the register one spot to the right. This way rightmost bit gets lost, and a leftmost becomes '*-*'. This is the only instruction that doesn't use the address part, making the last four bits irrelevant.  
-
-Any instruction after `SHIFT R -***` (*xxx) is interpreted as a READ instruction.
+* Any instruction that is not defined above gets interpreted as `READ ----` instruction.
 
 How to run on…
 --------------
