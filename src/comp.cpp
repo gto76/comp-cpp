@@ -245,7 +245,7 @@ void Ram::set(vector<bool> adr, vector<bool> wordIn) {
 		}
 	// Send word to printer
 	} else {
-		char formatedInt [3];
+		char formatedInt [4];
 		sprintf(formatedInt, "%3d", Util::getInt(wordIn));
 		string outputLine = Util::getString(wordIn) + " " + formatedInt + "\n";
         printer.print(outputLine);			
