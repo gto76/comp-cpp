@@ -7,6 +7,7 @@
 #include <fstream>
 #include <streambuf>
 #include <tuple>
+#include <cmath>
 
 #include "const.hpp"
 #include "util.hpp"
