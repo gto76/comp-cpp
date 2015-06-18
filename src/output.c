@@ -3,7 +3,7 @@
 #include <signal.h>
 #include <string.h>
 
-typedef void (*callback_function)(void); 
+typedef void (*callback_function)(void);
 void setOutput(callback_function drawScreen, int width, int height);
 void printCharXY(char c, int x, int y);
 void printString(char const s[], int x, int y);
@@ -49,7 +49,7 @@ void setOutput(callback_function drawScreenThat, int width, int height) {
 void printCharXY(char c, int x, int y) {
 	if (coordinatesOutOfBounds(x, y))
 		return;
-	printf("\033[%d;%dH%c", getAbsoluteY(y), getAbsoluteX(x), c);  	
+	printf("\033[%d;%dH%c", getAbsoluteY(y), getAbsoluteX(x), c);
 }
 
 void printString(char const s[], int x, int y) {
@@ -110,7 +110,7 @@ void registerSigWinChCatcher() {
 	struct sigaction action;
 
 	sigemptyset(&action.sa_mask);
-    action.sa_flags = 0;
+	action.sa_flags = 0;
 
 	action.sa_handler = sigWinChCatcher;
 	sigaction(SIGWINCH, &action, NULL);
@@ -132,11 +132,11 @@ void updateConsoleSize() {
 ///////// UTIL //////////
 
 void copyArray(char dest[], const char src[], int width) {
-    int i;
-    for (i = 0; i < width-1; i++) {
-        dest[i] = src[i];
-    }   
-    dest[width-1] = '\0';
+	int i;
+	for (i = 0; i < width-1; i++) {
+		dest[i] = src[i];
+	}
+	dest[width-1] = '\0';
 }
 
 
