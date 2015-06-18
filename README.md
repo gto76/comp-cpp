@@ -9,7 +9,7 @@ Memory
 ------
 ```
 instructions - 4 bits
-  |  +-- adresses - 4 bits
+  |  +-- addresses - 4 bits
   v  v
 ----***-  <- 0  ----
 --*-**-*  <- 1  ---*
