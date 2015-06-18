@@ -1,5 +1,5 @@
 CFLAGS=-std=gnu11 -g -Wall -O3
-CPPFLAGS=-std=c++11 -Wall
+CPPFLAGS=-std=c++11 
 
 SOURCES_CPP=$(wildcard src/*.cpp) 
 SOURCES_C=$(wildcard src/*.c)
