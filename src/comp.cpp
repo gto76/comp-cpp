@@ -91,8 +91,8 @@ void switchBitUnderCursor() {
 
 void run() {
 	if (executionCounter > 0) {
-    	printer.print("            \n");
-    }
+		printer.print("            \n");
+	}
 	savedRam = ram.state;
 	cpu.exec();
 	// if 'esc' was pressed then it doesn't wait for keypress at the end
@@ -248,7 +248,7 @@ void Ram::set(vector<bool> adr, vector<bool> wordIn) {
 		char formatedInt [4];
 		sprintf(formatedInt, "%3d", Util::getInt(wordIn));
 		string outputLine = Util::getString(wordIn) + " " + formatedInt + "\n";
-        printer.print(outputLine);
+		printer.print(outputLine);
 	}
 }
 
@@ -299,12 +299,12 @@ void Cpu::exec() {
 		case 7:
 			shiftRight();
 			break;
-        case 8:
-            shiftLeft();
-            break;
-        case 9:
-            setImmediate(adr);
-            break;
+		case 8:
+			shiftLeft();
+			break;
+		case 9:
+			setImmediate(adr);
+			break;
 		default:
 			read(adr);
 	}
@@ -386,13 +386,13 @@ void Cpu::shiftRight() {
 }
 
 void Cpu::shiftLeft() {
-    reg = Util::getBoolByte(Util::getInt(reg) * 2);
-    increasePc();
+	reg = Util::getBoolByte(Util::getInt(reg) * 2);
+	increasePc();
 }
 
 void Cpu::setImmediate(vector<bool> adr) {
-    reg = Util::getBoolByte(Util::getInt(adr));
-    increasePc();
+	reg = Util::getBoolByte(Util::getInt(adr));
+	increasePc();
 }
 
 /*

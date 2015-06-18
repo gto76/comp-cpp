@@ -28,8 +28,8 @@ class Cpu {
 		void jumpIfMax(vector<bool> adr);
 		void jumpIfMin(vector<bool> adr);
 		void shiftRight();
-        void shiftLeft();
-        void setImmediate(vector<bool> adr);
+		void shiftLeft();
+		void setImmediate(vector<bool> adr);
 };
 
 #endif
