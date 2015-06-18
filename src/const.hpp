@@ -1,8 +1,6 @@
 #ifndef CONST_H
 #define CONST_H
 
-#include <string>
-
 using namespace std;
 
 const int WORD_SIZE = 8;

@@ -1,6 +1,8 @@
 #ifndef PRINTER_H
 #define PRINTER_H
 
+#include <string>
+
 using namespace std;
 
 class Printer {
