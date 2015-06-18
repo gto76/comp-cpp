@@ -1,7 +1,6 @@
 #include <algorithm>
 #include <vector>
 #include <string>
-// Ex: #include <regex>
 #include <fstream>
 
 #include "const.hpp"
@@ -37,12 +36,12 @@ Renderer::Renderer(Printer printerIn, Ram ramIn, Cpu cpuIn) {
 
 // DYNAMIC PRIVATE:
 string Renderer::insertActualValues(string lineIn) {
-	// Ex: regex alpNum("[0-9a-z]");
 	string lineOut;
 
 	for (char cIn : lineIn) {
 		char cOut;
 
+        // Regex: [0-9a-z];
 		bool charIsALightbulb = (cIn >= 'a' && cIn <= 'z') || (cIn >= '0' && cIn <= '9');
         if (charIsALightbulb) {
             cOut = getLightbulb(cIn);
@@ -57,8 +56,7 @@ string Renderer::insertActualValues(string lineIn) {
 char Renderer::getLightbulb(char cIn) {
     int i = switchIndex[cIn]++;
 
-    // Ex: regex patRam("[0-9a-e]");
-
+    // Regex: [0-9a-e]
 	bool charRepresentsRam = (cIn >= 'a' && cIn <= 'e') || (cIn >= '0' && cIn <= '9');
     if (charRepresentsRam) {
         int j = Util::hexToInt(cIn);
