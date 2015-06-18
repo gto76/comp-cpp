@@ -1,6 +1,10 @@
+Example Programs
+================
+
 RANDOM DOT
-==========
+----------
 Single bit that jumps randomly one spot to the left or to the right every cycle
+```
 ----***-
 ---*****
 ----****
@@ -16,3 +20,4 @@ Single bit that jumps randomly one spot to the left or to the right every cycle
 ---****-
 -*------
 ----*---
+```
