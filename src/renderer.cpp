@@ -75,6 +75,8 @@ char Renderer::getLightbulb(char cIn) {
         case 'o':
             return getFormattedOutput(i);
     }
+	printf("There was an error parsing a drawing file. Problem with char %c. Aborting", cIn);
+	exit(2);
 }
 
 bool Renderer::pcIsPointingToAddress(int adr) {
@@ -106,7 +108,7 @@ bool Renderer::instructionHasId(int id) {
 }
 
 char Renderer::getFormattedOutput(int i) {
-    if (printer.getPrinterOutput().length() <= i) {
+    if (printer.getPrinterOutput().length() <= (unsigned) i) {
         return ' ';
     } else {
         return printer.getPrinterOutput().at(i);

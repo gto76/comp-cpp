@@ -161,6 +161,8 @@ tuple<int,int> Util::getLocationOfFirstRamLightbulb() {
 			i++;
 		}
 	}
+	printf("Could not find ram in drawing. Aborting");
+	exit(1);
 }
 
 // Returns the code of last pressed key, or 0 if none was pressed
