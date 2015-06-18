@@ -70,7 +70,7 @@ cygwin\Cygwin.bat
 ### UNIX
 ```bash
 git clone https://github.com/gto76/comp-cpp.git
-cd comp
+cd comp-cpp
 bash run
 ```
 
