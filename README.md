@@ -30,7 +30,7 @@ instructions - 4 bits
 ```
 
 * Execution starts at the first address (0). 
-* Execution stops when program reaches last address (15)
+* Execution stops when program reaches last address (15).
 * Whatever gets written to the last address is send to the printer.
 * Computer has one 8 bit register.
 * When reading from the last address (15), we get a random byte value.
