@@ -1,7 +1,7 @@
 #include <algorithm>
 #include <vector>
 #include <string>
-#include <regex>
+// Ex: #include <regex>
 #include <fstream>
 
 #include "const.hpp"
@@ -37,16 +37,18 @@ Renderer::Renderer(Printer printerIn, Ram ramIn, Cpu cpuIn) {
 
 // DYNAMIC PRIVATE:
 string Renderer::insertActualValues(string lineIn) {
-	regex alpNum("[0-9a-z]");
+	// Ex: regex alpNum("[0-9a-z]");
 	string lineOut;
 
 	for (char cIn : lineIn) {
 		char cOut;
-		if (!regex_match(Util::getString(cIn), alpNum)) {
-			cOut = cIn;
-		} else {
-			cOut = getLightbulb(cIn);
-		}
+
+		bool charIsALightbulb = (cIn >= 'a' && cIn <= 'z') || (cIn >= '0' && cIn <= '9');
+        if (charIsALightbulb) {
+            cOut = getLightbulb(cIn);
+        } else {
+            cOut = cIn;
+        }
 		lineOut += cOut;
 	}
 	return lineOut;
@@ -55,9 +57,9 @@ string Renderer::insertActualValues(string lineIn) {
 char Renderer::getLightbulb(char cIn) {
     int i = switchIndex[cIn]++;
 
-    regex patRam("[0-9a-e]");
+    // Ex: regex patRam("[0-9a-e]");
 
-    bool charRepresentsRam = regex_match(Util::getString(cIn), patRam);
+	bool charRepresentsRam = (cIn >= 'a' && cIn <= 'e') || (cIn >= '0' && cIn <= '9');
     if (charRepresentsRam) {
         int j = Util::hexToInt(cIn);
         return getRamAt(j, i);
@@ -75,8 +77,8 @@ char Renderer::getLightbulb(char cIn) {
         case 'o':
             return getFormattedOutput(i);
     }
-	printf("There was an error parsing a drawing file. Problem with char %c. Aborting", cIn);
-	exit(2);
+	//There was an error parsing a drawing file. Problem with char cIn
+    return ' ';
 }
 
 bool Renderer::pcIsPointingToAddress(int adr) {
