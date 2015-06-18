@@ -10,6 +10,6 @@ const int RAM_SIZE = 15;
 // Miliseconds between cycles (if automatic)
 const int FQ = 333;
 
-const int NUM_OF_INSTRUCTIONS = 8;
+const int NUM_OF_INSTRUCTIONS = 10;
 
 #endif
