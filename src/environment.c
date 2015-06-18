@@ -17,7 +17,7 @@ void disableRepeatAndCursor(void);
 void resetEnvironment(void);
 void resetInputMode(void);
 void enableRepeatAndCursor(void);
-void resetConsole(void); 
+void resetConsole(void);
 
 //////////////////////////////
 
@@ -46,7 +46,7 @@ void saveAttributes() {
 	tcgetattr(STDIN_FILENO, &saved_attributes);
 }
 
-// blocking mode (getc waits for input) 
+// blocking mode (getc waits for input)
 void setMenuMode() {
 	setNoncanonicalMode(1, 0);
 }
@@ -83,7 +83,7 @@ void sigIntCatcher(int signum) {
 void disableRepeatAndCursor() {
 	if (DISABLE_REPEAT) {
 		// disable repeat in xwindow console
-		system("xset -r"); 
+		system("xset -r");
 		// disable repeat in Linux console
 		system("setterm --repeat off");
 	}

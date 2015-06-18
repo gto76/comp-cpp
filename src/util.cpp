@@ -53,7 +53,7 @@ vector<bool> Util::getBool(int num, int length) {
 		}
 		num = num % divider;
 	}
-	return out;	
+	return out;
 }
 
 vector<bool> Util::getBoolByte(string sIn) {
@@ -91,7 +91,7 @@ string Util::getString(vector<bool> bbb) {
 char Util::getChar(bool b) {
 	if (b) {
 		return '*';
-	} else { 
+	} else {
 		return '-';
 	}
 }
@@ -101,17 +101,17 @@ vector<string> Util::splitString(string stringIn) {
 	stringstream stream (stringIn);
 	string line;
 	while (getline(stream, line)) {
-  		out.push_back(line);
+		out.push_back(line);
 	}
 	return out;
 }
 
 string Util::makeString(vector<string> lines) {
 	string out;
-    for (string line : lines) {
-        out += line;
-    }
-    return out;
+	for (string line : lines) {
+		out += line;
+	}
+	return out;
 }
 
 int Util::hexToInt(char cIn) {
@@ -131,12 +131,12 @@ string Util::getString(char cIn) {
 }
 
 vector<vector<bool>> Util::getRamFromString(string ramString) {
-    vector<vector<bool>> data = vector<vector<bool>>(RAM_SIZE, vector<bool>(WORD_SIZE));
-    int i = 0;
-    for (string line : splitString(ramString)) {
-    	data[i++] = getBoolByte(line);
-    }
-    return data;
+	vector<vector<bool>> data = vector<vector<bool>>(RAM_SIZE, vector<bool>(WORD_SIZE));
+	int i = 0;
+	for (string line : splitString(ramString)) {
+		data[i++] = getBoolByte(line);
+	}
+	return data;
 }
 
 vector<bool> Util::getRandomWord() {
@@ -152,7 +152,7 @@ tuple<int,int> Util::getLocationOfFirstRamLightbulb() {
 	int j = 0;
 	for (char c : drawing) {
 		if (c == '0') {
-			return tuple<int,int>(i, j); 
+			return tuple<int,int>(i, j);
 		}
 		if (c == '\n') {
 			i = 0;
@@ -168,14 +168,14 @@ tuple<int,int> Util::getLocationOfFirstRamLightbulb() {
 // Returns the code of last pressed key, or 0 if none was pressed
 int Util::getKey() {
 	int c = 0;
-    struct timeval tv = { 0L, 0L };
-    fd_set fds;
-    FD_ZERO(&fds);
-    FD_SET(STDIN_FILENO, &fds);
-    select(STDIN_FILENO + 1, &fds, NULL, NULL, &tv);
+	struct timeval tv = { 0L, 0L };
+	fd_set fds;
+	FD_ZERO(&fds);
+	FD_SET(STDIN_FILENO, &fds);
+	select(STDIN_FILENO + 1, &fds, NULL, NULL, &tv);
 
-    if (FD_ISSET(STDIN_FILENO, &fds)) {
+	if (FD_ISSET(STDIN_FILENO, &fds)) {
 		c = getchar();
 	}
-	return c;	
+	return c;
 }

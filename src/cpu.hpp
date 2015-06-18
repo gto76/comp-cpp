@@ -12,7 +12,7 @@ class Cpu {
 		void exec();
 		vector<bool> getRegister();
 		vector<bool> getPc();
-		vector<bool> getInstruction(); 
+		vector<bool> getInstruction();
 		vector<bool> getAddress();
 		int getCycle();
 	private:
