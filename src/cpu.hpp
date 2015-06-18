@@ -12,7 +12,7 @@ class Cpu {
 		void exec();
 		vector<bool> getRegister();
 		vector<bool> getPc();
-		vector<bool> getInstruction(); 
+		vector<bool> getInstruction();
 		vector<bool> getAddress();
 		int getCycle();
 	private:
@@ -28,6 +28,8 @@ class Cpu {
 		void jumpIfMax(vector<bool> adr);
 		void jumpIfMin(vector<bool> adr);
 		void shiftRight();
+		void shiftLeft();
+		void setImmediate(vector<bool> adr);
 };
 
 #endif

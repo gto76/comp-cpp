@@ -21,7 +21,7 @@
 using namespace std;
 
 extern "C" {
-	typedef void (*callback_function)(void); 
+	typedef void (*callback_function)(void);
 	void setEnvironment();
 	void setOutput(callback_function drawScreen, int width, int height);
 	void printCharXY(char c, int x, int y);
@@ -91,8 +91,8 @@ void switchBitUnderCursor() {
 
 void run() {
 	if (executionCounter > 0) {
-    	printer.print("            \n");	
-    }
+		printer.print("            \n");
+	}
 	savedRam = ram.state;
 	cpu.exec();
 	// if 'esc' was pressed then it doesn't wait for keypress at the end
@@ -248,7 +248,7 @@ void Ram::set(vector<bool> adr, vector<bool> wordIn) {
 		char formatedInt [4];
 		sprintf(formatedInt, "%3d", Util::getInt(wordIn));
 		string outputLine = Util::getString(wordIn) + " " + formatedInt + "\n";
-        printer.print(outputLine);			
+		printer.print(outputLine);
 	}
 }
 
@@ -262,7 +262,7 @@ void Cpu::exec() {
 		return;
 	}
 
-	cycle++;     
+	cycle++;
 	redrawScreen();
 
 	// Stop if reached last address
@@ -273,9 +273,9 @@ void Cpu::exec() {
 	vector<bool> instruction = getInstruction();
 	int instCode = Util::getInt(instruction);
 	vector<bool> adr = getAddress();
-	
+
 	switch (instCode) {
-		case 0: 
+		case 0:
 			read(adr);
 			break;
 		case 1:
@@ -298,6 +298,12 @@ void Cpu::exec() {
 			break;
 		case 7:
 			shiftRight();
+			break;
+		case 8:
+			shiftLeft();
+			break;
+		case 9:
+			setImmediate(adr);
 			break;
 		default:
 			read(adr);
@@ -327,7 +333,7 @@ vector<bool> Cpu::getInstruction() {
 }
 
 vector<bool> Cpu::getAddress() {
-	return Util::getSecondNibble(ram.get(pc)); 
+	return Util::getSecondNibble(ram.get(pc));
 }
 
 void Cpu::increasePc() {
@@ -346,7 +352,7 @@ void Cpu::write(vector<bool> adr) {
 
 void Cpu::add(vector<bool> adr) {
 	reg = Util::getBoolByte(Util::getInt(reg) + Util::getInt(ram.get(adr)));
-	increasePc();			
+	increasePc();
 }
 
 void Cpu::sub(vector<bool> adr) {
@@ -376,7 +382,17 @@ void Cpu::jumpIfMin(vector<bool> adr) {
 
 void Cpu::shiftRight() {
 	reg = Util::getBoolByte(Util::getInt(reg) / 2);
-	increasePc();	
+	increasePc();
+}
+
+void Cpu::shiftLeft() {
+	reg = Util::getBoolByte(Util::getInt(reg) * 2);
+	increasePc();
+}
+
+void Cpu::setImmediate(vector<bool> adr) {
+	reg = Util::getBoolByte(Util::getInt(adr));
+	increasePc();
 }
 
 /*
