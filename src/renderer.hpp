@@ -12,10 +12,10 @@ using namespace std;
 
 class Renderer {
 	public:
-		static string renderState(Printer pritnerIn, Ram ramIn, Cpu cpuIn);
+		static string renderState(Printer printerIn, Ram ramIn, Cpu cpuIn);
 
 	private:
-		Renderer (Printer pritnerIn, Ram ramIn, Cpu cpuIn);
+		Renderer (Printer printerIn, Ram ramIn, Cpu cpuIn);
 		Printer printer;
 		Ram ram;
 		Cpu cpu;
