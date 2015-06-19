@@ -75,11 +75,6 @@ cd comp-cpp
 bash run
 ```
 
-Example programs
-----------------
-If you come up with interesting program, please feel free to add it to [doc/example-programs](doc/example-programs.md).
-
-
 
 
 
