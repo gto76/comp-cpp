@@ -71,6 +71,8 @@ void setNoncanonicalMode(int vmin, int vtime) {
 
 void registerSigIntCatcher() {
 	struct sigaction action;
+	// reset all members
+	memset(&action, 0, sizeof(action));
 	action.sa_handler = sigIntCatcher;
 	sigaction(SIGINT, &action, NULL);
 }
