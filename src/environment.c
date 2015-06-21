@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <signal.h>
+#include <string.h>
 #include <sys/ioctl.h>
 
 void setEnvironment(void);
@@ -88,9 +89,9 @@ void sigIntCatcher(int signum) {
 void disableRepeatAndCursor() {
 	if (DISABLE_REPEAT) {
 		// disable repeat in xwindow console
-		system("xset -r");
+		if (system("xset -r"));
 		// disable repeat in Linux console
-		system("setterm --repeat off");
+		if (system("setterm --repeat off"));
 	}
 	// set cursor off. could also probably use system("setterm -cursor off);
 	printf("\e[?25l");
@@ -106,7 +107,7 @@ void resetEnvironment() {
 }
 
 void resetConsole() {
-	system("reset");
+	if (system("reset"));
 }
 
 void resetInputMode() {
@@ -117,11 +118,11 @@ void resetInputMode() {
 void enableRepeatAndCursor() {
 	if (DISABLE_REPEAT) {
 		// enable repeat in Xwindow console
-		system("xset r");
+		if (system("xset r"));
 		// disable repeat in Linux console
-		system("setterm --repeat on");
+		if (system("setterm --repeat on"));
 	}
-	system("clear");
+	if (system("clear"));
 	// bring back cursor
 	printf("\e[?25h");
 	fflush(stdout) ;
