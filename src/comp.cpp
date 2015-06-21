@@ -28,6 +28,7 @@ extern "C" {
 	void printString(const char s[], int x, int y);
 	void redrawScreen();
 	void resetEnvironment();
+	extern int screenResized;
 }
 
 Printer printer;
@@ -81,6 +82,7 @@ void highlightCursor(bool highlight) {
 	if (highlight) {
 		printf("\e[%dm\e[%dm", 37, 40);
 	}
+	fflush(stdout);
 }
 
 void switchBitUnderCursor() {
@@ -89,7 +91,21 @@ void switchBitUnderCursor() {
 	buffer.at(cursorY+ramY).at(cursorX+ramX) = Util::getChar(newBitValue);
 }
 
-void run() {
+char readStdin(bool drawCursor) {
+	char c = 0;
+	errno = 0;
+	ssize_t num = read(0, &c, 1);
+	if (num == -1 && errno == EINTR) {
+		redrawScreen();
+		if (drawCursor) {
+			highlightCursor(true);
+		}
+		return readStdin(drawCursor);
+	}
+	return c;
+}
+
+void run() { 
 	if (executionCounter > 0) {
 		printer.print("            \n");
 	}
@@ -99,7 +115,7 @@ void run() {
 	if (executionCanceled) {
 		executionCanceled = false;
 	} else {
-		getc(stdin);
+		readStdin(false);
 	}
 	ram = Ram();
 	ram.state = savedRam;
@@ -110,7 +126,8 @@ void run() {
 
 void userInput() {
 	while(1) {
-		char c = getc(stdin);
+		char c = readStdin(true);
+
 		highlightCursor(false);
 		switch (c) {
 			case 65: // up
@@ -160,7 +177,7 @@ void sleepAndCheckForKey() {
 			return;
 		}
 		// Press key to continue
-		keyCode = getc(stdin);
+		keyCode = readStdin(false);
 		// If the key was esc
 		if (keyCode == 27) {
 			executionCanceled = true;

@@ -32,6 +32,8 @@ int rows = DEFAULT_HEIGHT;
 
 callback_function drawScreen;
 
+int screenResized = 0;
+
 ///////// PUBLIC ////////////
 
 void setOutput(callback_function drawScreenThat, int width, int height) {
@@ -97,6 +99,7 @@ void clearScreen(void) {
 }
 
 void redrawScreen() {
+	screenResized = 0;
 	updateConsoleSize();
 	clearScreen();
 	// draw stuff here
@@ -118,7 +121,7 @@ void registerSigWinChCatcher() {
 
 // Fires when window size changes
 void sigWinChCatcher(int signum) {
-	redrawScreen();
+	screenResized = 1;
 }
 
 // Asks system about window size
