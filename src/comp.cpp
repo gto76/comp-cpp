@@ -29,6 +29,7 @@ extern "C" {
 	void redrawScreen();
 	void resetEnvironment();
 	extern int screenResized;
+	extern int pleaseExit;
 }
 
 Printer printer;
@@ -96,6 +97,10 @@ char readStdin(bool drawCursor) {
 	errno = 0;
 	ssize_t num = read(0, &c, 1);
 	if (num == -1 && errno == EINTR) {
+		// Exit if ctrl-c was pressed
+		if (pleaseExit) {
+			exit(0);
+		}
 		redrawScreen();
 		if (drawCursor) {
 			highlightCursor(true);
@@ -168,6 +173,12 @@ void userInput() {
 // Run every cycle
 void sleepAndCheckForKey() {
 	usleep(FQ*1000);
+
+	// Exit if ctrl-c was pressed
+	if (pleaseExit) {
+		exit(0);
+	}
+	
 	// Pauses execution if a key was hit, and waits for another key hit
 	int keyCode = Util::getKey();
 	if (keyCode) {

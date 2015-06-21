@@ -102,7 +102,6 @@ void redrawScreen() {
 	screenResized = 0;
 	updateConsoleSize();
 	clearScreen();
-	// draw stuff here
 	drawScreen();
 	fflush(stdout);
 }

@@ -25,6 +25,8 @@ struct termios saved_attributes;
 
 int const DISABLE_REPEAT = 0;
 
+int pleaseExit = 0;
+
 //////// AT START ////////////
 
 void setEnvironment() {
@@ -77,7 +79,8 @@ void registerSigIntCatcher() {
 // necesary so that atexit method gets executed,
 // that sets terminal back to the original state.
 void sigIntCatcher(int signum) {
-	exit(0);
+	//exit(0);
+	pleaseExit = 1;
 }
 
 void disableRepeatAndCursor() {
