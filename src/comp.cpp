@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <unistd.h>
+#include <signal.h>
 #include <iostream>
 #include <algorithm>
 #include <vector>
@@ -28,8 +29,8 @@ extern "C" {
 	void printString(const char s[], int x, int y);
 	void redrawScreen();
 	void resetEnvironment();
-	extern int screenResized;
-	extern int pleaseExit;
+	extern volatile sig_atomic_t screenResized;
+	extern volatile sig_atomic_t pleaseExit;
 }
 
 Printer printer;

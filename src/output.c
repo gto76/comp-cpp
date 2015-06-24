@@ -31,8 +31,7 @@ int columns = DEFAULT_WIDTH;
 int rows = DEFAULT_HEIGHT;
 
 callback_function drawScreen;
-
-int screenResized = 0;
+volatile sig_atomic_t screenResized = 0;
 
 ///////// PUBLIC ////////////
 

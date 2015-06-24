@@ -22,11 +22,10 @@ void resetConsole(void);
 
 //////////////////////////////
 
-struct termios saved_attributes;
-
 int const DISABLE_REPEAT = 0;
 
-int pleaseExit = 0;
+struct termios saved_attributes;
+volatile sig_atomic_t pleaseExit = 0;
 
 //////// AT START ////////////
 

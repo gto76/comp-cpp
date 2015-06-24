@@ -2,6 +2,6 @@
 #define ENVIRONMENT_H
 
 void setEnvironment();
-extern int pleaseExit;
+extern volatile sig_atomic_t pleaseExit;
 
 #endif
