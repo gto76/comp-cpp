@@ -286,17 +286,22 @@ void Ram::set(vector<bool> adr, vector<bool> wordIn) {
  */
 
 void Cpu::exec() {
-	sleepAndCheckForKey();
-	if (executionCanceled) {
-		return;
+	while(!executionCanceled) {
+		bool shouldContinue = step();
+		redrawScreen(); // always redraw
+		if(!shouldContinue) {
+			return;
+		}
+		sleepAndCheckForKey();
 	}
+}
 
+bool Cpu::step() {
 	cycle++;
-	redrawScreen();
 
 	// Stop if reached last address
 	if (Util::getInt(pc) >= RAM_SIZE) {
-		return;
+		return false;
 	}
 
 	vector<bool> instruction = getInstruction();
@@ -331,7 +336,8 @@ void Cpu::exec() {
 		default:
 			read(adr);
 	}
-	exec();
+
+	return true;
 }
 
 int Cpu::getCycle() {

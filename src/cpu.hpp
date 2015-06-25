@@ -19,6 +19,7 @@ class Cpu {
 		vector<bool> reg = vector<bool>(WORD_SIZE);
 		vector<bool> pc = vector<bool>(ADDR_SIZE);
 		int cycle = 0;
+		bool step();
 		void increasePc();
 		void read(vector<bool> adr);
 		void write(vector<bool> adr);
