@@ -24,6 +24,7 @@ class Util {
 		static vector<bool> getRandomWord();
 		static tuple<int,int> getLocationOfFirstRamLightbulb();
 		static int getKey();
+		static bool fileExists(string filename);
 
 	private:
 		static vector<bool> getBool(int num, int length);

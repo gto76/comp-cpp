@@ -111,6 +111,11 @@ char readStdin(bool drawCursor) {
 	return c;
 }
 
+/*
+ * Saves the state of the ram and starts the execution of a program.
+ * When execution stops, due to it reaching last address or user pressing 'esc',
+ * it loads back the saved state of the ram, and resets the cpu.
+ */
 void run() { 
 	if (executionCounter > 0) {
 		printer.print("            \n");
@@ -128,6 +133,19 @@ void run() {
 	cpu = Cpu();
 	redrawScreen();
 	executionCounter++;
+}
+
+string getFreeFileName() {
+	int i = 0;
+	while (Util::fileExists(SAVE_FILE_NAME + to_string(++i)));
+	return SAVE_FILE_NAME + to_string(i);
+}
+
+void saveRamToFile() {
+	string fileName = getFreeFileName();
+	ofstream fileStream(fileName);
+    fileStream << ram.getString();
+    fileStream.close();
 }
 
 void userInput() {
@@ -160,6 +178,9 @@ void userInput() {
 					cursorX--;
 				}
 				break;
+			case 115: // s
+				saveRamToFile();
+				break;
 			case 32: // space
 				switchBitUnderCursor();
 				break;
@@ -171,7 +192,9 @@ void userInput() {
 	}
 }
 
-// Run every cycle
+/*
+ * Run every cycle.
+ */
 void sleepAndCheckForKey() {
 	usleep(FQ*1000);
 
@@ -197,6 +220,10 @@ void sleepAndCheckForKey() {
 	}
 }
 
+/*
+ * Initializes 'output.c' by sending dimensions of a 'drawing' and a 'drawScreen'  
+ * callback function, that output.c will use on every screen redraw.
+ */
 void prepareOutput() {
 	size_t drawingWidth = 0;
 	size_t drawingHeight = 0;
@@ -205,6 +232,42 @@ void prepareOutput() {
 		drawingHeight++;
 	}
 	setOutput(&drawScreen, drawingWidth, drawingHeight);
+}
+
+bool getBool(char c) {
+	return c == '*';
+}
+
+void loadRamFromFileStream(ifstream* fileStream) {
+	int address = 0;
+	while(!fileStream->eof()) {
+		int bitIndex = 0;
+		string line;
+    	getline(*fileStream, line); // TODO check delimiters (WIN vs UNIX)
+		for (char c : line) {
+			ram.state.at(address).at(bitIndex) = getBool(c);
+			if (++bitIndex >= WORD_SIZE) {
+				break;
+			}
+		}
+		if (++address >= RAM_SIZE) {
+			return;
+		}
+  	} 
+}
+
+void loadRamIfFileSpecified(int argc, const char* argv[]) {
+	if (argc <= 1) {
+		return;
+	}
+   	ifstream fileStream;    
+	fileStream.open(argv[1]);   
+	if (fileStream.fail()) {
+    	fprintf(stderr, "Invalid filename '%s'. Aborting ram load.", argv[1]);
+   	} else {
+   		loadRamFromFileStream(&fileStream);
+      	fileStream.close();  
+   	}
 }
 
 /*
@@ -281,6 +344,14 @@ void Ram::set(vector<bool> adr, vector<bool> wordIn) {
 	}
 }
 
+string Ram::getString() {
+	string out;
+	for (vector<bool> word : state) {
+		out += Util::getString(word) + '\n';
+	}
+	return out;
+}
+
 /*
  * CPU
  */
@@ -354,7 +425,8 @@ vector<bool> Cpu::getPc() {
 
 vector<bool> Cpu::getInstruction() {
 	vector<bool> instruction = Util::getFirstNibble(ram.get(pc));
-	// if instruction id is larger than the number of instructions than the instruction with id 1 (write) gets executed.
+	// If instruction id is larger than the number of instructions then 
+	// the instruction with id 1 (write) gets executed.
 	if (Util::getInt(instruction) >= NUM_OF_INSTRUCTIONS) {
 		return Util::getBoolNibb(0);
 	}
@@ -423,6 +495,7 @@ int main(int argc, const char* argv[]) {
 	setRamOffset();
 	setEnvironment();
 	prepareOutput();
+	loadRamIfFileSpecified(argc, argv);
 	redrawScreen();
 	highlightCursor(true);
 	userInput();

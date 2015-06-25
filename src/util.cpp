@@ -1,13 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <unistd.h>
+#include <sys/select.h>
+#include <sys/stat.h>
 #include <iostream>
 #include <sstream>
 #include <string>
 #include <vector>
 #include <tuple>
-#include <unistd.h>
-#include <sys/select.h>
 
 #include "const.hpp"
 #include "util.hpp"
@@ -165,7 +166,9 @@ tuple<int,int> Util::getLocationOfFirstRamLightbulb() {
 	exit(1);
 }
 
-// Returns the code of last pressed key, or 0 if none was pressed
+/*
+ * Returns the code of last pressed key, or 0 if none was pressed.
+ */
 int Util::getKey() {
 	int c = 0;
 	struct timeval tv = { 0L, 0L };
@@ -178,4 +181,12 @@ int Util::getKey() {
 		c = getchar();
 	}
 	return c;
+}
+
+bool Util::fileExists(string filename) {
+    struct stat buf;
+    if (stat(filename.c_str(), &buf) != -1) {
+        return true;
+    }
+    return false;
 }
