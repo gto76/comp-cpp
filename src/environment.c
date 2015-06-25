@@ -85,12 +85,20 @@ void sigIntCatcher(int signum) {
 	pleaseExit = 1;
 }
 
+void checkRetVal(int retVal, char const errMsg[]) {
+	if (retVal == -1) {
+		fprintf(stderr, "%s", errMsg);
+	}
+}
+
 void disableRepeatAndCursor() {
 	if (DISABLE_REPEAT) {
 		// disable repeat in xwindow console
-		system("xset -r");
+		int retVal = system("xset -r");
+		checkRetVal(retVal, "Could disable key repeat.");
 		// disable repeat in Linux console
-		system("setterm --repeat off");
+		retVal = system("setterm --repeat off");
+		checkRetVal(retVal, "Could disable key repeat.");
 	}
 	// set cursor off. could also probably use system("setterm -cursor off);
 	printf("\e[?25l");
@@ -103,12 +111,6 @@ void resetEnvironment() {
 	resetInputMode();
 	enableRepeatAndCursor();
 	resetConsole();
-}
-
-void checkRetVal(int retVal, char const errMsg[]) {
-	if (retVal == -1) {
-		fprintf(stderr, "%s", errMsg);
-	}
 }
 
 void resetConsole() {
@@ -125,10 +127,10 @@ void enableRepeatAndCursor() {
 	if (DISABLE_REPEAT) {
 		// enable repeat in Xwindow console
 		int retVal = system("xset r");
-		checkRetVal(retVal, "Could not set key repeat.");
+		checkRetVal(retVal, "Could not enable key repeat.");
 		// disable repeat in Linux console
 		retVal = system("setterm --repeat on");
-		checkRetVal(retVal, "Could not set key repeat.");
+		checkRetVal(retVal, "Could not enable key repeat.");
 	}
 	int retVal = system("clear");
 	checkRetVal(retVal, "Could not clear the screen.");
