@@ -105,8 +105,15 @@ void resetEnvironment() {
 	resetConsole();
 }
 
+void checkRetVal(int retVal, char const errMsg[]) {
+	if (retVal == -1) {
+		fprintf(stderr, "%s", errMsg);
+	}
+}
+
 void resetConsole() {
-	system("reset");
+	int retVal = system("reset");
+	checkRetVal(retVal, "Could not reset the screen.");
 }
 
 void resetInputMode() {
@@ -117,11 +124,14 @@ void resetInputMode() {
 void enableRepeatAndCursor() {
 	if (DISABLE_REPEAT) {
 		// enable repeat in Xwindow console
-		system("xset r");
+		int retVal = system("xset r");
+		checkRetVal(retVal, "Could not set key repeat.");
 		// disable repeat in Linux console
-		system("setterm --repeat on");
+		retVal = system("setterm --repeat on");
+		checkRetVal(retVal, "Could not set key repeat.");
 	}
-	system("clear");
+	int retVal = system("clear");
+	checkRetVal(retVal, "Could not clear the screen.");
 	// bring back cursor
 	printf("\e[?25h");
 	fflush(stdout) ;
