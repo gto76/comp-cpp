@@ -61,13 +61,10 @@ vector<bool> Util::getBoolByte(string sIn) {
 	vector<bool> out(8);
 	int i = 0;
 	for (char c : sIn) {
-		if (c == '-') {
-			out.at(i++) = false;
-		} else if (c == '*') {
-			out.at(i++) = true;
-		} else {
-			cout << "Input Error 02 - Unrecognized char";
-			exit(2);
+		// '*' is interpreted as true, all other characters as false.
+		out.at(i++) = c == '*';
+		if (i == WORD_SIZE) {
+			break;
 		}
 	}
 	return out;

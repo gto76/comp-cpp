@@ -33,6 +33,8 @@ extern "C" {
 	extern volatile sig_atomic_t pleaseExit;
 }
 
+bool interactvieMode;
+
 Printer printer;
 Ram ram;
 Cpu cpu;
@@ -256,6 +258,25 @@ void loadRamFromFileStream(ifstream* fileStream) {
   	} 
 }
 
+bool inputIsPiped() {
+	return !isatty(fileno(stdin));
+	//Ex: return !isatty(STDIN_FILENO);
+}
+
+void checkIfInputIsPiped() {
+	interactvieMode = !inputIsPiped();
+}
+
+vector<bool> readLineFromPipe() {
+	string line;
+	getline(cin, line);
+	// If reached end of pipe input
+	if (!cin) {
+		exit(0);
+	}
+	return Util::getBoolByte(line);
+}
+
 void loadRamIfFileSpecified(int argc, const char* argv[]) {
 	if (argc <= 1) {
 		return;
@@ -270,13 +291,61 @@ void loadRamIfFileSpecified(int argc, const char* argv[]) {
    	}
 }
 
+void processArguments(int argc, const char* argv[]) {
+	/*
+	int aflag = 0;
+	int bflag = 0;
+	char *cvalue = NULL;
+	int index;
+	int c;
+
+	opterr = 0;
+	while ((c = getopt (argc, argv, "abc:")) != -1) {
+		switch (c) {
+			case 'a':
+				aflag = 1;
+				break;
+			case 'b':
+				bflag = 1;
+				break;
+			case 'c':
+				cvalue = optarg;
+				break;
+			case '?':
+				if (optopt == 'c')
+			  		fprintf (stderr, "Option -%c requires an argument.\n", optopt);
+				else if (isprint (optopt))
+					fprintf (stderr, "Unknown option `-%c'.\n", optopt);
+				else
+			 		fprintf (stderr,
+			        "Unknown option character `\\x%x'.\n",
+			        optopt);
+				return 1;
+			default:
+				abort ();
+		}
+	}
+
+	printf ("aflag = %d, bflag = %d, cvalue = %s\n", aflag, bflag, cvalue);
+
+	for (index = optind; index < argc; index++) {
+		printf ("Non-option argument %s\n", argv[index]);
+	}
+	return 0;
+	*/
+}
+
 /*
  * PRINTER
  */
 
 void Printer::print(string sIn) {
-	output += sIn;
-	printerOutputUpdated = false;
+	if (interactvieMode) {
+		output += sIn;
+		printerOutputUpdated = false;
+	} else {
+		cout << sIn;
+	}
 }
 
 string Printer::getOutput() {
@@ -316,10 +385,14 @@ string Printer::renderPrinterOutput() {
 
 vector<bool> Ram::get(vector<bool> adr) {
 	int address = Util::getInt(adr);
-	// return random if last address (reserved for output)
+	// Return random if last address (reserved for output),
+	// or read from pipe if input is piped in.
 	if (address == RAM_SIZE) {
-		vector<bool> wordOut = Util::getRandomWord();
-		return wordOut;
+		if (interactvieMode) {
+			return Util::getRandomWord();
+		} else {
+			return readLineFromPipe();
+		}
 	}
 	vector<bool> wordOut(WORD_SIZE);
 	for (int i = 0; i < WORD_SIZE; i++) {
@@ -359,11 +432,15 @@ string Ram::getString() {
 void Cpu::exec() {
 	while(!executionCanceled) {
 		bool shouldContinue = step();
-		redrawScreen(); // always redraw
+		if (interactvieMode) {
+			redrawScreen();
+		}
 		if(!shouldContinue) {
 			return;
 		}
-		sleepAndCheckForKey();
+		if (interactvieMode) {
+			sleepAndCheckForKey();
+		}
 	}
 }
 
@@ -490,15 +567,28 @@ void Cpu::shiftRight() {
  * MAIN
  */
 
-int main(int argc, const char* argv[]) {
-	srand(time(NULL));
+void startInteractiveMode() {
 	setRamOffset();
 	setEnvironment();
 	prepareOutput();
-	loadRamIfFileSpecified(argc, argv);
 	redrawScreen();
 	highlightCursor(true);
 	userInput();
+}
+
+void startNonInteractiveMode() {
+	cpu.exec();
+}
+
+int main(int argc, const char* argv[]) {
+	srand(time(NULL));
+	checkIfInputIsPiped();
+	loadRamIfFileSpecified(argc, argv);
+	if (interactvieMode) {
+		startInteractiveMode();
+	} else {
+		startNonInteractiveMode();
+	}
 }
 
 
