@@ -70,7 +70,6 @@ Key shortcuts
 * `esc` - cancel execution
 * `d` - delete word
 * `j`, `k` - move word down / up
-* `s` - save ram to file named `saved-ram-<number>`, to load it start application with `./comp FILENAME`
 
 
 
