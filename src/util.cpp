@@ -94,6 +94,20 @@ char Util::getChar(bool b) {
 	}
 }
 
+string Util::getFormatedInt(vector<bool> wordIn) {
+	char formatedInt [4];
+	sprintf(formatedInt, "%3d", Util::getInt(wordIn));
+	return formatedInt;
+}
+
+string Util::getStringWithFormatedInt(vector<bool> wordIn) {
+	return Util::getString(wordIn) + " " + Util::getFormatedInt(wordIn) + "\n";
+}
+
+/*
+ * GENERAL UTIL
+ */
+
 vector<string> Util::splitString(string stringIn) {
 	vector<string> out;
 	stringstream stream (stringIn);
@@ -186,4 +200,35 @@ bool Util::fileExists(string filename) {
         return true;
     }
     return false;
+}
+
+bool Util::inputIsPiped() {
+	return !isatty(fileno(stdin));
+}
+
+bool Util::outputIsPiped() {
+	return !isatty(fileno(stdout));
+}
+
+bool Util::startsWithDigit(string line) {
+	if (line.empty()) {
+		return false;
+	}
+	return isdigit(line[0]);
+}
+
+int Util::extractInteger(string line) {
+	int i = 0;
+	for (char c : line) {
+		if (!isdigit(c)) {
+			break;
+		}
+		i++;
+	}
+	string stringNumber = line.substr(0, i);
+	stringstream ss;
+	ss << stringNumber;
+	int out;
+	ss >> out;
+	return out;
 }

@@ -7,7 +7,8 @@ using namespace std;
 
 class Printer {
 	public:
-		void print(string sIn);
+		void print(vector<bool> sIn);
+		void printEmptyLine();
 		string getOutput();
 		string getPrinterOutput();
 		void clear();
