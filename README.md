@@ -75,7 +75,14 @@ cd comp-cpp
 bash run
 ```
 
-
+Key shortcuts
+-------------
+* `space`, `f` - Switch bits value
+* `enter` - Start/pause execution
+* `esc` - Cancel execution
+* `d` - Delete word
+* `j` / `k` - Move word down/up
+* `s` - Saves ram to file named saved-ram-<number>. To load it start application with `./comp FILENAME`
 
 
 
