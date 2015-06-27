@@ -101,6 +101,35 @@ void eraseByteUnderCursor() {
 	redrawScreen();
 }
 
+bool switchBytesInRam(int index1, int index2) {
+	if (index1 < 0 || index2 < 0 || index1 >= RAM_SIZE || index2 >= RAM_SIZE) {
+		return false;
+	}
+	vector<bool> addr1 = Util::getBoolNibb(index1);
+	vector<bool> addr2 = Util::getBoolNibb(index2);
+	vector<bool> temp = ram.get(addr1);
+	ram.set(addr1, ram.get(addr2));
+	ram.set(addr2, temp);
+	return true;
+}
+
+void moveByteFor(int delta) {
+	bool failed = !switchBytesInRam(cursorY, cursorY+delta);
+	if (failed) {
+		return;
+	}
+	cursorY += delta;
+	redrawScreen();
+}
+
+void moveByteUnderCursorUp() {
+	moveByteFor(-1);
+}
+
+void moveByteUnderCursorDown() {
+	moveByteFor(1);
+}
+
 char readStdin(bool drawCursor) {
 	char c = 0;
 	errno = 0;
@@ -163,28 +192,30 @@ void userInput() {
 		highlightCursor(false);
 		switch (c) {
 			case 65: // up
-			case 107: // k
 				if (cursorY > 0) {
 					cursorY--;
 				}
 				break;
 			case 66: // down
-			case 106: // j
 				if (cursorY < RAM_SIZE-1) {
 					cursorY++;
 				}
 				break;
 			case 67: // right
-			case 108: // l
 				if (cursorX < WORD_SIZE-1) {
 					cursorX++;
 				}
 				break;
 			case 68: // left
-			case 104: // h
 				if (cursorX > 0) {
 					cursorX--;
 				}
+				break;
+			case 107: // k
+				moveByteUnderCursorUp();
+				break;
+			case 106: // j
+				moveByteUnderCursorDown();
 				break;
 			case 115: // s
 				saveRamToFile();
