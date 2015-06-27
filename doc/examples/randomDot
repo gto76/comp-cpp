@@ -1,0 +1,21 @@
+# randomDot DIRECTION...
+#
+# Single bit that jumps one spot to the left or to the right
+# every cycle, depending on the value red from last address.
+# If value is larger than 127, then jumps left, otherwise right.
+
+----***-
+---*****
+----****
+--*--**-
+-*-**--*
+----***-
+-*******
+-**-----
+-*--**--
+----***-
+--*-***-
+-*-*----
+---****-
+-*------
+----*---

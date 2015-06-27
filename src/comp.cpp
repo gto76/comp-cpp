@@ -90,7 +90,13 @@ void highlightCursor(bool highlight) {
 void switchBitUnderCursor() {
 	bool newBitValue = !ram.state.at(cursorY).at(cursorX);
 	ram.state.at(cursorY).at(cursorX) = newBitValue;
+	// Only change char of the buffer, as to avoid screen redraw.
 	buffer.at(cursorY+ramY).at(cursorX+ramX) = Util::getChar(newBitValue);
+}
+
+void eraseByteUnderCursor() {
+	ram.set(Util::getBoolNibb(cursorY), Util::getBoolByte(0));
+	redrawScreen();
 }
 
 char readStdin(bool drawCursor) {
@@ -182,7 +188,11 @@ void userInput() {
 				saveRamToFile();
 				break;
 			case 32: // space
+			case 102: // f
 				switchBitUnderCursor();
+				break;
+			case 100: // d
+				eraseByteUnderCursor();
 				break;
 			case 10: // enter
 				run();
@@ -240,10 +250,14 @@ bool getBool(char c) {
 
 void loadRamFromFileStream(ifstream* fileStream) {
 	int address = 0;
-	while(!fileStream->eof()) {
+	while (!fileStream->eof()) {
 		int bitIndex = 0;
 		string line;
-    	getline(*fileStream, line); // TODO check delimiters (WIN vs UNIX)
+    	getline(*fileStream, line);
+    	// Ignore line if empty or a comment.
+    	if (line.empty() || line[0] == '#') {
+    		continue;
+    	}
 		for (char c : line) {
 			ram.state.at(address).at(bitIndex) = getBool(c);
 			if (++bitIndex >= WORD_SIZE) {
@@ -255,6 +269,7 @@ void loadRamFromFileStream(ifstream* fileStream) {
 		}
   	} 
 }
+
 
 void loadRamIfFileSpecified(int argc, const char* argv[]) {
 	if (argc <= 1) {

@@ -1,0 +1,20 @@
+# sumAll SUMMAND SUMMAND...
+#
+# Reads summands from last address and adds them to the result.
+# Prints result after every addition.
+
+----****
+---****-
+----****
+--*-***-
+---****-
+---*****
+-*----*-
+--------
+--------
+--------
+--------
+--------
+--------
+--------
+--------
