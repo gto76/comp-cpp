@@ -77,12 +77,12 @@ bash run
 
 Key shortcuts
 -------------
-* `space`, `f` - Switch bits value
-* `enter` - Start/pause execution
+* `space`, `f` - Switch bit's value
+* `enter` - Start / pause execution
 * `esc` - Cancel execution
 * `d` - Delete word
-* `j` / `k` - Move word down/up
-* `s` - Saves ram to file named saved-ram-<number>. To load it start application with `./comp FILENAME`
+* `j`, `k` - Move word down / up
+* `s` - Saves ram to file named `saved-ram-<number>`. To load it start application with `./comp FILENAME`
 
 
 
