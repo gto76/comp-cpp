@@ -1,0 +1,20 @@
+# mulToSum MULTIPLICAND MULTIPLIER
+#
+# Reads multiplicand and multiplier from last address, then
+# prints multiplicand multiplier times.
+
+----****
+---****-
+----****
+---***-*
+-**---*-
+----***-
+---*****
+----**-*
+--****--
+-*----**
+--------
+--------
+-------*
+--------
+--------

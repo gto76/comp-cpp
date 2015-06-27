@@ -92,7 +92,13 @@ void highlightCursor(bool highlight) {
 void switchBitUnderCursor() {
 	bool newBitValue = !ram.state.at(cursorY).at(cursorX);
 	ram.state.at(cursorY).at(cursorX) = newBitValue;
+	// Only change char of the buffer, as to avoid screen redraw.
 	buffer.at(cursorY+ramY).at(cursorX+ramX) = Util::getChar(newBitValue);
+}
+
+void eraseByteUnderCursor() {
+	ram.set(Util::getBoolNibb(cursorY), Util::getBoolByte(0));
+	redrawScreen();
 }
 
 char readStdin(bool drawCursor) {
@@ -184,7 +190,11 @@ void userInput() {
 				saveRamToFile();
 				break;
 			case 32: // space
+			case 102: // f
 				switchBitUnderCursor();
+				break;
+			case 100: // d
+				eraseByteUnderCursor();
 				break;
 			case 10: // enter
 				run();
@@ -242,10 +252,14 @@ bool getBool(char c) {
 
 void loadRamFromFileStream(ifstream* fileStream) {
 	int address = 0;
-	while(!fileStream->eof()) {
+	while (!fileStream->eof()) {
 		int bitIndex = 0;
 		string line;
-    	getline(*fileStream, line); // TODO check delimiters (WIN vs UNIX)
+    	getline(*fileStream, line);
+    	// Ignore line if empty or a comment.
+    	if (line.empty() || line[0] == '#') {
+    		continue;
+    	}
 		for (char c : line) {
 			ram.state.at(address).at(bitIndex) = getBool(c);
 			if (++bitIndex >= WORD_SIZE) {
@@ -260,7 +274,6 @@ void loadRamFromFileStream(ifstream* fileStream) {
 
 bool inputIsPiped() {
 	return !isatty(fileno(stdin));
-	//Ex: return !isatty(STDIN_FILENO);
 }
 
 void checkIfInputIsPiped() {
@@ -289,50 +302,6 @@ void loadRamIfFileSpecified(int argc, const char* argv[]) {
    		loadRamFromFileStream(&fileStream);
       	fileStream.close();  
    	}
-}
-
-void processArguments(int argc, const char* argv[]) {
-	/*
-	int aflag = 0;
-	int bflag = 0;
-	char *cvalue = NULL;
-	int index;
-	int c;
-
-	opterr = 0;
-	while ((c = getopt (argc, argv, "abc:")) != -1) {
-		switch (c) {
-			case 'a':
-				aflag = 1;
-				break;
-			case 'b':
-				bflag = 1;
-				break;
-			case 'c':
-				cvalue = optarg;
-				break;
-			case '?':
-				if (optopt == 'c')
-			  		fprintf (stderr, "Option -%c requires an argument.\n", optopt);
-				else if (isprint (optopt))
-					fprintf (stderr, "Unknown option `-%c'.\n", optopt);
-				else
-			 		fprintf (stderr,
-			        "Unknown option character `\\x%x'.\n",
-			        optopt);
-				return 1;
-			default:
-				abort ();
-		}
-	}
-
-	printf ("aflag = %d, bflag = %d, cvalue = %s\n", aflag, bflag, cvalue);
-
-	for (index = optind; index < argc; index++) {
-		printf ("Non-option argument %s\n", argv[index]);
-	}
-	return 0;
-	*/
 }
 
 /*
