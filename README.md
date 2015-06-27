@@ -60,7 +60,7 @@ How to run on…
 ```bash
 git clone https://github.com/gto76/comp-cpp.git
 cd comp-cpp
-bash run
+./run
 ```
 
 Key shortcuts
