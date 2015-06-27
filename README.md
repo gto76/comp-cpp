@@ -63,8 +63,8 @@ cd comp-cpp
 ./run
 ```
 
-Key shortcuts
--------------
+Keys
+----
 * `space`, `f` - switch bit's value
 * `enter` - start / pause execution
 * `esc` - cancel execution
