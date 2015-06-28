@@ -63,15 +63,6 @@ cd comp-cpp
 ./run
 ```
 
-Keys
-----
-* `space`, `f` - switch bit's value
-* `enter` - start / pause execution
-* `esc` - cancel execution
-* `d` - delete word
-* `j`, `k` - move word down / up
-
-
 
 
 
