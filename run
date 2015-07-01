@@ -1,5 +1,3 @@
-#!/bin/bash
-#
 # Usage: run 
 # Compiles and runs if no errors present.
 
