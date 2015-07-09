@@ -1,5 +1,5 @@
-Comp
-====
+Comp Mark I
+===========
 
 Simple 4-bit/1 Hz virtual computer for learning purposes
 
@@ -65,7 +65,7 @@ cd comp-cpp
 
 Other versions
 --------------
-* [**Mark II**](https://github.com/gto76/comp-m2), a model with separate address space for code and data and more instructions. Also can be run without the interface (instead of a printer it uses stdout) and with piped input.  
+* [**Mark II**](https://github.com/gto76/comp-m2), a model with separate address space for code and data and with more instructions. Programs can be saved and loaded and it can run without the interface (instead of a printer it then uses stdout). Also input can be piped in.  
  <a href="https://github.com/gto76/comp-m2/"> <img src="https://github.com/gto76/comp-m2/raw/master/doc/screenshot.png" alt="screenshot" width=400"/></a>
 
 
