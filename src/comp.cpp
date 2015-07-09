@@ -18,19 +18,14 @@
 #include "cpu.hpp"
 #include "renderer.hpp"
 #include "drawing.hpp"
+#include "output.hpp"
 
 using namespace std;
 
 extern "C" {
-	typedef void (*callback_function)(void);
-	void setEnvironment();
-	void setOutput(callback_function drawScreen, int width, int height);
-	void printCharXY(char c, int x, int y);
-	void printString(const char s[], int x, int y);
-	void redrawScreen();
-	void resetEnvironment();
-	extern volatile sig_atomic_t screenResized;
 	extern volatile sig_atomic_t pleaseExit;
+	void setEnvironment();
+	void resetEnvironment();
 }
 
 Printer printer;
@@ -80,7 +75,7 @@ void highlightCursor(bool highlight) {
 	if (highlight) {
 		printf("\e[%dm\e[%dm", 30, 47);
 	}
-	printCharXY(c, cursorX+ramX, cursorY+ramY);
+	printCharImediately(c, cursorX+ramX, cursorY+ramY);
 	if (highlight) {
 		printf("\e[%dm\e[%dm", 37, 40);
 	}
@@ -542,6 +537,7 @@ int main(int argc, const char* argv[]) {
 	setEnvironment();
 	prepareOutput();
 	loadRamIfFileSpecified(argc, argv);
+	clearScreen();
 	redrawScreen();
 	highlightCursor(true);
 	userInput();
