@@ -67,7 +67,7 @@ T-Shirt
 -------
 I'm not even shure if I want it, but then again maybe I'm just
 not enoug of a geek :)  
- <a href="http://www.spreadshirt.com/comp-C3376A102694377#/detail/102694377"> <img src="http://image.spreadshirtmedia.com/image-server/v1/products/1006902056/views/1,width=130,height=130.png alt="screenshot" "/></a>
+ <a href="http://www.spreadshirt.com/comp-C3376A102694377#/detail/102694377"> <img src="http://image.spreadshirtmedia.com/image-server/v1/products/1006902056/views/1,width=130,height=130.png" alt="screenshot"/></a>
 
 Other versions
 --------------
