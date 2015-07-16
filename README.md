@@ -63,6 +63,12 @@ cd comp-cpp
 ./run
 ```
 
+T-Shirt
+-------
+I'm not even shure if I want it, but then again maybe I'm just
+not enoug of a geek :)  
+ <a href="http://www.spreadshirt.com/comp-C3376A102694377#/detail/102694377"> <img src="http://image.spreadshirtmedia.com/image-server/v1/products/1006902056/views/1,width=130,height=130.png alt="screenshot" "/></a>
+
 Other versions
 --------------
 * [**Mark II**](https://github.com/gto76/comp-m2), model with separate address space for code and data, and with more instructions. Programs can be saved and loaded and it can run without the interface (instead of a printer, it then uses stdout). Also input can be piped in.  
