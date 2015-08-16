@@ -70,10 +70,4 @@ Other versions
  <a href="https://github.com/gto76/comp-m2/"> <img src="https://github.com/gto76/comp-m2/raw/master/doc/screenshot.png" alt="screenshot" width=400"/></a>
 
 
-T-Shirt
--------
-I'm not even shure if I want it, but then again, maybe I'm just
-not enoug of a geek :)  
- <a href="http://www.spreadshirt.com/comp-C3376A102725353#/detail/102725353"> <img src="http://image.spreadshirtmedia.com/image-server/v1/products/1006961017/views/1,width=190,height=190.png" alt="screenshot"/></a>
-
 
