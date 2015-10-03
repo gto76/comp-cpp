@@ -63,5 +63,10 @@ cd comp-cpp
 ./run
 ```
 
+Other versions
+--------------
+* [**Mark II**](https://github.com/gto76/comp-m2), model with separate address space for code and data, and with more instructions. Programs can be saved and loaded and it can run without the interface (instead of a printer, it then uses stdout). Also input can be piped in.  
+<a href="https://github.com/gto76/comp-m2/"> <img src="https://github.com/gto76/comp-m2/raw/master/doc/screenshot.png" alt="screenshot" width=400"/></a>
+
 
 
