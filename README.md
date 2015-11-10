@@ -5,6 +5,8 @@ Simple 4-bit/1 Hz virtual computer for learning purposes
 
 ![screenshot](doc/screenshot.png)
 
+For quick start see [**HOW TO RUN**](README.md#how-to-run-on).
+
 Memory
 ------
 ```
