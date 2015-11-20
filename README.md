@@ -59,10 +59,10 @@ How to run on…
 * Run the *UNIX* commands.
 
 ### UNIX
-```bash
-git clone https://github.com/gto76/comp-cpp.git
-cd comp-cpp
-./run
+```
+$ git clone https://github.com/gto76/comp-cpp.git
+$ cd comp-cpp
+$ ./run
 ```
 
 Other versions
