@@ -85,7 +85,7 @@ void highlightCursor(bool highlight) {
 void switchBitUnderCursor() {
 	bool newBitValue = !ram.state.at(cursorY).at(cursorX);
 	ram.state.at(cursorY).at(cursorX) = newBitValue;
-	// Only change char of the buffer, as to avoid screen redraw.
+	// Only changes char of the buffer, as to avoid screen redraw.
 	buffer.at(cursorY+ramY).at(cursorX+ramX) = Util::getChar(newBitValue);
 }
 
@@ -128,7 +128,7 @@ char readStdin(bool drawCursor) {
 	errno = 0;
 	ssize_t num = read(0, &c, 1);
 	if (num == -1 && errno == EINTR) {
-		// Exit if ctrl-c was pressed
+		// Exits if ctrl-c was pressed.
 		if (pleaseExit) {
 			exit(0);
 		}
@@ -152,7 +152,7 @@ void run() {
 	}
 	savedRam = ram.state;
 	cpu.exec();
-	// if 'esc' was pressed then it doesn't wait for keypress at the end
+	// if 'esc' was pressed then it doesn't wait for keypress at the end.
 	if (executionCanceled) {
 		executionCanceled = false;
 	} else {
@@ -229,27 +229,27 @@ void userInput() {
 }
 
 /*
- * Run every cycle.
+ * Runs every cycle.
  */
 void sleepAndCheckForKey() {
 	usleep(FQ*1000);
 
-	// Exit if ctrl-c was pressed
+	// Exits if ctrl-c was pressed.
 	if (pleaseExit) {
 		exit(0);
 	}
 	
-	// Pauses execution if a key was hit, and waits for another key hit
+	// Pauses execution if a key was hit, and waits for another key hit.
 	int keyCode = Util::getKey();
 	if (keyCode) {
-		// If escape was pressed
+		// If escape was pressed.
 		if (keyCode == 27) {
 			executionCanceled = true;
 			return;
 		}
-		// Press key to continue
+		// Press key to continue.
 		keyCode = readStdin(false);
-		// If the key was esc
+		// If the key was esc.
 		if (keyCode == 27) {
 			executionCanceled = true;
 		}
@@ -280,7 +280,7 @@ void loadRamFromFileStream(ifstream* fileStream) {
 		int bitIndex = 0;
 		string line;
     	getline(*fileStream, line);
-    	// Ignore line if empty or a comment.
+    	// Ignores line if empty or a comment.
     	if (line.empty() || line[0] == '#') {
     		continue;
     	}
@@ -357,7 +357,7 @@ string Printer::renderPrinterOutput() {
 
 vector<bool> Ram::get(vector<bool> adr) {
 	int address = Util::getInt(adr);
-	// return random if last address (reserved for output)
+	// Returns random if last address (reserved for output).
 	if (address == RAM_SIZE) {
 		vector<bool> wordOut = Util::getRandomWord();
 		return wordOut;
@@ -371,12 +371,12 @@ vector<bool> Ram::get(vector<bool> adr) {
 
 void Ram::set(vector<bool> adr, vector<bool> wordIn) {
 	int address = Util::getInt(adr);
-	// Save word
+	// Saves word.
 	if (address < RAM_SIZE) {
 		for (int i = 0; i < WORD_SIZE; i++) {
 			state[address][i] = wordIn[i];
 		}
-	// Send word to printer
+	// Sends word to printer.
 	} else {
 		char formatedInt [4];
 		sprintf(formatedInt, "%3d", Util::getInt(wordIn));
@@ -400,7 +400,7 @@ string Ram::getString() {
 void Cpu::exec() {
 	while(!executionCanceled) {
 		bool shouldContinue = step();
-		redrawScreen(); // always redraw
+		redrawScreen();  // Always redraws.
 		if(!shouldContinue) {
 			return;
 		}
@@ -411,7 +411,7 @@ void Cpu::exec() {
 bool Cpu::step() {
 	cycle++;
 
-	// Stop if reached last address
+	// Stops if reached last address.
 	if (Util::getInt(pc) >= RAM_SIZE) {
 		return false;
 	}
@@ -542,5 +542,4 @@ int main(int argc, const char* argv[]) {
 	highlightCursor(true);
 	userInput();
 }
-
 
