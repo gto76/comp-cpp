@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   style="enable-background:new"
+   version="1.1"
+   id="svg2"
+   viewBox="0 0 617.50793 340.01036"
+   height="95.958481mm"
+   width="174.27446mm">
+  <defs
+     id="defs4" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     transform="translate(-68.571426,-67.871414)"
+     style="display:inline;opacity:1"
+     id="layer1">
+    <text
+       id="text3336"
+       y="78.076492"
+       x="68.571426"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.75px;line-height:125%;font-family:'DejaVu Sans Mono';-inkscape-font-specification:'DejaVu Sans Mono';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       xml:space="preserve"><tspan
+         y="78.076492"
+         x="68.571426"
+         id="tspan3338">                                RAM  AD PC</tspan><tspan
+         id="tspan3340"
+         y="95.263992"
+         x="68.571426">                       ADDR  ________ _ _ </tspan><tspan
+         id="tspan3342"
+         y="112.45149"
+         x="68.571426">                       ---- |----**-*|-|-|</tspan><tspan
+         id="tspan3344"
+         y="129.63899"
+         x="68.571426">                       ---* |---*****|-|-|</tspan><tspan
+         id="tspan3346"
+         y="146.82649"
+         x="68.571426">                       --*- |--*-***-|-|-|</tspan><tspan
+         id="tspan3348"
+         y="164.01399"
+         x="68.571426">      CPU              --** |---***--|-|-|               PRINTER</tspan><tspan
+         id="tspan3350"
+         y="181.20149"
+         x="68.571426"> ______________        -*-- |----**-*|-|-|       ________________________ </tspan><tspan
+         id="tspan3352"
+         y="198.38899"
+         x="68.571426">|              |       -*-* |---****-|-|-|      |                        |</tspan><tspan
+         id="tspan3354"
+         y="215.57649"
+         x="68.571426">|  [----**-*]  |       -**- |----**--|-|-|     (|   |=============[]=|   |)</tspan><tspan
+         id="tspan3356"
+         y="232.76399"
+         x="68.571426">|______________| INST  -*** |---***-*|-|-|      |__ _ ______________ _ __|</tspan><tspan
+         id="tspan3358"
+         y="249.95149"
+         x="68.571426">| [-] READ     | ----  *--- |--***-**|-|*|       | |0| ----*---   8 |0| |</tspan><tspan
+         id="tspan3360"
+         y="267.13898"
+         x="68.571426">| [-] WRITE    | ---*  *--* |-**-----|-|-|       | |0| -----*-*   5 |0| |</tspan><tspan
+         id="tspan3362"
+         y="284.32648"
+         x="68.571426">| [-] ADD      | --*-  *-*- |-*--****|-|-|       | |0| ------**   3 |0| |</tspan><tspan
+         id="tspan3364"
+         y="301.51398"
+         x="68.571426">| [*] SUBTRACT | --**  *-** |---**---|*|-|       | |0| ------*-   2 |0| |</tspan><tspan
+         id="tspan3366"
+         y="318.70148"
+         x="68.571426">| [-] JUMP     | -*--  **-- |----**-*|-|-|       | |0| -------*   1 |0| |</tspan><tspan
+         id="tspan3368"
+         y="335.88898"
+         x="68.571426">| [-] IF MAX   | -*-*  **-* |----**-*|-|-|       | |0| -------*   1 |0| |</tspan><tspan
+         id="tspan3370"
+         y="353.07648"
+         x="68.571426">| [-] IF MIN   | -**-  ***- |----*---|-|-|       | |0|______________|0| |</tspan><tspan
+         id="tspan3372"
+         y="370.26398"
+         x="68.571426">| [-] SHIFT R  | -***  **** | OUTPUT |-|-|       |                      |</tspan><tspan
+         id="tspan3374"
+         y="387.45148"
+         x="68.571426"> ##############              ############         ######################</tspan><tspan
+         id="tspan3376"
+         y="404.63898"
+         x="68.571426">  []        [] \____________/ []      [] \_______/ []                []</tspan></text>
+  </g>
+</svg>
