@@ -55,7 +55,7 @@ How to run on…
 
 ### Windows
 
-* Run *Tiny Core Linux* on *VirtualBox* using this [**instructions**](https://github.com/gto76/my-linux-setup/tree/gh-pages/conf-files/tiny-core-linux).
+* Install *Tiny Core Linux* on *VirtualBox* using this [**instructions**](https://github.com/gto76/my-linux-setup/tree/gh-pages/conf-files/tiny-core-linux).
 * Run the *UNIX* commands.
 
 ### UNIX
